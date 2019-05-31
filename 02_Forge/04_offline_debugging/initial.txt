@@ -1,0 +1,198 @@
+message (0-7): Launching program /home/student001/Tutorial/02_Forge/04_offline_debugging/mmult3_c.exe
+message (0-7): at Wed May 29 02:39:23 2019
+message (0-7): Executable modified on Wed May 29 02:39:21 2019
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] **********************WARNING***********************
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] Failed to automatically detect the CPU architecture.
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] This may lead to subpar communication performance.
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] ****************************************************
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] **********************WARNING***********************
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] Failed to automatically detect the CPU architecture.
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] This may lead to subpar communication performance.
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] ****************************************************
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] **********************WARNING***********************
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] Failed to automatically detect the CPU architecture.
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] This may lead to subpar communication performance.
+[ip-172-30-0-5.eu-west-1.compute.internal:mpi_rank_0][mv2_get_arch_type] ****************************************************
+message (0-7): Startup complete.
+message (n/a): Select process group All
+message: Stacks
+message: Processes Function           Variables
+message: 0-7       main (mmult3.c:95) [Rank=0, thread=1], argc=1, argv=0xffffffffd3f8, filename="", mat_a=0x400b90, mat_b=0xffffffffd2c0, mat_c=0x401600, myrank=0, nproc=0, size=0, slice=4200024, st=<aggregate value>
+message: Current Stack
+message: #0 main (argc=1, argv=0xffffffffd3f8) at /home/student001/Tutorial/02_Forge/04_offline_debugging/mmult3.c:95 (at 0x000000000040109c)
+message: Locals
+message: argc: 1 argv: 0xffffffffd3f8 filename: "" mat_a: 0x400b90 mat_b: 0xffffffffd2c0 mat_c: 0x401600 myrank: 0 nproc: 0 size: 0 slice: 4200024 st:
+message (n/a): Debugging                : /home/student001/Tutorial/02_Forge/04_offline_debugging/mmult3_c.exe 
+message (n/a): MPI implementation       : Auto-Detect (MVAPICH 2)
+message (n/a): * number of processes    : 8
+message (n/a): * number of nodes        : 1
+message (n/a): Memory debugging enabled : Yes
+message (n/a): * setting                : Fast
+message (n/a): * check bounds           : Off
+message (0-7): Play
+0: Size of the matrices: 1024x1024
+message: Leak Report
+message: Rank 1 : 5.70 MB | 5.24 MB MPIDI_RMA_init | 72.70 kB _GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc) | 45.05 kB MPIR_T_CVAR_REGISTER_impl | 33.97 kB MV2_set_bcast_tuning_table | 23.57 kB MV2_set_allreduce_tuning_table | 23.57 kB MV2_set_reduce_tuning_table | 17.73 kB MV2_set_scatter_tuning_table | 17.73 kB MV2_set_gather_tuning_table | 450.42 kB Others |
+message: Rank 2 : 5.70 MB | 5.24 MB MPIDI_RMA_init | 72.70 kB _GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc) | 45.05 kB MPIR_T_CVAR_REGISTER_impl | 33.97 kB MV2_set_bcast_tuning_table | 23.57 kB MV2_set_allreduce_tuning_table | 23.57 kB MV2_set_reduce_tuning_table | 17.73 kB MV2_set_scatter_tuning_table | 17.73 kB MV2_set_gather_tuning_table | 450.42 kB Others |
+message: Rank 3 : 5.70 MB | 5.24 MB MPIDI_RMA_init | 72.70 kB _GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc) | 45.05 kB MPIR_T_CVAR_REGISTER_impl | 33.97 kB MV2_set_bcast_tuning_table | 23.57 kB MV2_set_allreduce_tuning_table | 23.57 kB MV2_set_reduce_tuning_table | 17.73 kB MV2_set_scatter_tuning_table | 17.73 kB MV2_set_gather_tuning_table | 450.42 kB Others |
+message: Rank 4 : 5.70 MB | 5.24 MB MPIDI_RMA_init | 72.70 kB _GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc) | 45.05 kB MPIR_T_CVAR_REGISTER_impl | 33.97 kB MV2_set_bcast_tuning_table | 23.57 kB MV2_set_allreduce_tuning_table | 23.57 kB MV2_set_reduce_tuning_table | 17.73 kB MV2_set_scatter_tuning_table | 17.73 kB MV2_set_gather_tuning_table | 450.42 kB Others |
+message: Rank 5 : 5.70 MB | 5.24 MB MPIDI_RMA_init | 72.70 kB _GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc) | 45.05 kB MPIR_T_CVAR_REGISTER_impl | 33.97 kB MV2_set_bcast_tuning_table | 23.57 kB MV2_set_allreduce_tuning_table | 23.57 kB MV2_set_reduce_tuning_table | 17.73 kB MV2_set_scatter_tuning_table | 17.73 kB MV2_set_gather_tuning_table | 450.42 kB Others |
+message: Rank 6 : 5.70 MB | 5.24 MB MPIDI_RMA_init | 72.70 kB _GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc) | 45.05 kB MPIR_T_CVAR_REGISTER_impl | 33.97 kB MV2_set_bcast_tuning_table | 23.57 kB MV2_set_allreduce_tuning_table | 23.57 kB MV2_set_reduce_tuning_table | 17.73 kB MV2_set_scatter_tuning_table | 17.73 kB MV2_set_gather_tuning_table | 450.42 kB Others |
+message: Rank 7 : 5.70 MB | 5.24 MB MPIDI_RMA_init | 72.70 kB _GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc) | 45.05 kB MPIR_T_CVAR_REGISTER_impl | 33.97 kB MV2_set_bcast_tuning_table | 23.57 kB MV2_set_allreduce_tuning_table | 23.57 kB MV2_set_reduce_tuning_table | 17.73 kB MV2_set_scatter_tuning_table | 17.73 kB MV2_set_gather_tuning_table | 450.42 kB Others |
+message: Rank 0 : 5.69 MB | 5.24 MB MPIDI_RMA_init | 72.70 kB _GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc) | 45.05 kB MPIR_T_CVAR_REGISTER_impl | 33.97 kB MV2_set_bcast_tuning_table | 23.57 kB MV2_set_allreduce_tuning_table | 23.57 kB MV2_set_reduce_tuning_table | 17.73 kB MV2_set_scatter_tuning_table | 17.73 kB MV2_set_gather_tuning_table | 420.50 kB Others |
+message: Backtraces for [MPIDI_RMA_init] on [rank 1]
+message: Backtraces for [_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)] on [rank 1]
+message: Backtraces for [MPIR_T_CVAR_REGISTER_impl] on [rank 1]
+message: Backtraces for [MV2_set_bcast_tuning_table] on [rank 1]
+message: Backtraces for [MV2_set_allreduce_tuning_table] on [rank 1]
+message: Backtraces for [MV2_set_reduce_tuning_table] on [rank 1]
+message: Backtraces for [MV2_set_scatter_tuning_table] on [rank 1]
+message: Backtraces for [MV2_set_gather_tuning_table] on [rank 1]
+message: Backtraces for [MPIDI_RMA_init] on [rank 2]
+message: Backtraces for [_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)] on [rank 2]
+message: Backtraces for [MPIR_T_CVAR_REGISTER_impl] on [rank 2]
+message: Backtraces for [MV2_set_bcast_tuning_table] on [rank 2]
+message: Backtraces for [MV2_set_allreduce_tuning_table] on [rank 2]
+message: Backtraces for [MV2_set_reduce_tuning_table] on [rank 2]
+message: Backtraces for [MV2_set_scatter_tuning_table] on [rank 2]
+message: Backtraces for [MV2_set_gather_tuning_table] on [rank 2]
+message: Backtraces for [MPIDI_RMA_init] on [rank 3]
+message: Backtraces for [_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)] on [rank 3]
+message: Backtraces for [MPIR_T_CVAR_REGISTER_impl] on [rank 3]
+message: Backtraces for [MV2_set_bcast_tuning_table] on [rank 3]
+message: Backtraces for [MV2_set_allreduce_tuning_table] on [rank 3]
+message: Backtraces for [MV2_set_reduce_tuning_table] on [rank 3]
+message: Backtraces for [MV2_set_scatter_tuning_table] on [rank 3]
+message: Backtraces for [MV2_set_gather_tuning_table] on [rank 3]
+message: Backtraces for [MPIDI_RMA_init] on [rank 4]
+message: Backtraces for [_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)] on [rank 4]
+message: Backtraces for [MPIR_T_CVAR_REGISTER_impl] on [rank 4]
+message: Backtraces for [MV2_set_bcast_tuning_table] on [rank 4]
+message: Backtraces for [MV2_set_allreduce_tuning_table] on [rank 4]
+message: Backtraces for [MV2_set_reduce_tuning_table] on [rank 4]
+message: Backtraces for [MV2_set_scatter_tuning_table] on [rank 4]
+message: Backtraces for [MV2_set_gather_tuning_table] on [rank 4]
+message: Backtraces for [MPIDI_RMA_init] on [rank 5]
+message: Backtraces for [_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)] on [rank 5]
+message: Backtraces for [MPIR_T_CVAR_REGISTER_impl] on [rank 5]
+message: Backtraces for [MV2_set_bcast_tuning_table] on [rank 5]
+message: Backtraces for [MV2_set_allreduce_tuning_table] on [rank 5]
+message: Backtraces for [MV2_set_reduce_tuning_table] on [rank 5]
+message: Backtraces for [MV2_set_scatter_tuning_table] on [rank 5]
+message: Backtraces for [MV2_set_gather_tuning_table] on [rank 5]
+message: Backtraces for [MPIDI_RMA_init] on [rank 6]
+message: Backtraces for [_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)] on [rank 6]
+message: Backtraces for [MPIR_T_CVAR_REGISTER_impl] on [rank 6]
+message: Backtraces for [MV2_set_bcast_tuning_table] on [rank 6]
+message: Backtraces for [MV2_set_allreduce_tuning_table] on [rank 6]
+message: Backtraces for [MV2_set_reduce_tuning_table] on [rank 6]
+message: Backtraces for [MV2_set_scatter_tuning_table] on [rank 6]
+message: Backtraces for [MV2_set_gather_tuning_table] on [rank 6]
+message: Backtraces for [MPIDI_RMA_init] on [rank 7]
+message: Backtraces for [_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)] on [rank 7]
+message: Backtraces for [MPIR_T_CVAR_REGISTER_impl] on [rank 7]
+message: Backtraces for [MV2_set_bcast_tuning_table] on [rank 7]
+message: Backtraces for [MV2_set_allreduce_tuning_table] on [rank 7]
+message: Backtraces for [MV2_set_reduce_tuning_table] on [rank 7]
+message: Backtraces for [MV2_set_scatter_tuning_table] on [rank 7]
+message: Backtraces for [MV2_set_gather_tuning_table] on [rank 7]
+message: Backtraces for [MPIDI_RMA_init] on [rank 0]
+message: Backtraces for [_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)] on [rank 0]
+message: Backtraces for [MPIR_T_CVAR_REGISTER_impl] on [rank 0]
+message: Backtraces for [MV2_set_bcast_tuning_table] on [rank 0]
+message: Backtraces for [MV2_set_allreduce_tuning_table] on [rank 0]
+message: Backtraces for [MV2_set_reduce_tuning_table] on [rank 0]
+message: Backtraces for [MV2_set_scatter_tuning_table] on [rank 0]
+message: Backtraces for [MV2_set_gather_tuning_table] on [rank 0]
+message: Raw CSV data from the Leak Report:
+"Rank","Allocated by","Count","Total Size","Count (including called functions)","Total Size (including called functions)"
+"0","MPIDI_RMA_init","2","5242880","2","5242880",
+"1","MPIDI_RMA_init","2","5242880","2","5242880",
+"2","MPIDI_RMA_init","2","5242880","2","5242880",
+"3","MPIDI_RMA_init","2","5242880","2","5242880",
+"4","MPIDI_RMA_init","2","5242880","2","5242880",
+"5","MPIDI_RMA_init","2","5242880","2","5242880",
+"6","MPIDI_RMA_init","2","5242880","2","5242880",
+"7","MPIDI_RMA_init","2","5242880","2","5242880",
+"0","_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)","1","72704","1","72704",
+"1","_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)","1","72704","1","72704",
+"2","_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)","1","72704","1","72704",
+"3","_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)","1","72704","1","72704",
+"4","_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)","1","72704","1","72704",
+"5","_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)","1","72704","1","72704",
+"6","_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)","1","72704","1","72704",
+"7","_GLOBAL__sub_I_eh_alloc.cc(void) (eh_alloc.cc)","1","72704","1","72704",
+"0","MPIR_T_CVAR_REGISTER_impl","330","45050","330","45050",
+"1","MPIR_T_CVAR_REGISTER_impl","330","45050","330","45050",
+"2","MPIR_T_CVAR_REGISTER_impl","330","45050","330","45050",
+"3","MPIR_T_CVAR_REGISTER_impl","330","45050","330","45050",
+"4","MPIR_T_CVAR_REGISTER_impl","330","45050","330","45050",
+"5","MPIR_T_CVAR_REGISTER_impl","330","45050","330","45050",
+"6","MPIR_T_CVAR_REGISTER_impl","330","45050","330","45050",
+"7","MPIR_T_CVAR_REGISTER_impl","330","45050","330","45050",
+"0","MV2_set_bcast_tuning_table","4","33968","4","33968",
+"1","MV2_set_bcast_tuning_table","4","33968","4","33968",
+"2","MV2_set_bcast_tuning_table","4","33968","4","33968",
+"3","MV2_set_bcast_tuning_table","4","33968","4","33968",
+"4","MV2_set_bcast_tuning_table","4","33968","4","33968",
+"5","MV2_set_bcast_tuning_table","4","33968","4","33968",
+"6","MV2_set_bcast_tuning_table","4","33968","4","33968",
+"7","MV2_set_bcast_tuning_table","4","33968","4","33968",
+"0","MV2_set_allreduce_tuning_table","4","23568","4","23568",
+"0","MV2_set_reduce_tuning_table","4","23568","4","23568",
+"1","MV2_set_allreduce_tuning_table","4","23568","4","23568",
+"1","MV2_set_reduce_tuning_table","4","23568","4","23568",
+"2","MV2_set_allreduce_tuning_table","4","23568","4","23568",
+"2","MV2_set_reduce_tuning_table","4","23568","4","23568",
+"3","MV2_set_allreduce_tuning_table","4","23568","4","23568",
+"3","MV2_set_reduce_tuning_table","4","23568","4","23568",
+"4","MV2_set_allreduce_tuning_table","4","23568","4","23568",
+"4","MV2_set_reduce_tuning_table","4","23568","4","23568",
+"5","MV2_set_allreduce_tuning_table","4","23568","4","23568",
+"5","MV2_set_reduce_tuning_table","4","23568","4","23568",
+"6","MV2_set_allreduce_tuning_table","4","23568","4","23568",
+"6","MV2_set_reduce_tuning_table","4","23568","4","23568",
+"7","MV2_set_allreduce_tuning_table","4","23568","4","23568",
+"7","MV2_set_reduce_tuning_table","4","23568","4","23568",
+"0","MV2_set_scatter_tuning_table","4","17728","4","17728",
+"0","MV2_set_gather_tuning_table","4","17728","4","17728",
+"1","MV2_set_scatter_tuning_table","4","17728","4","17728",
+"1","MV2_set_gather_tuning_table","4","17728","4","17728",
+"2","MV2_set_scatter_tuning_table","4","17728","4","17728",
+"2","MV2_set_gather_tuning_table","4","17728","4","17728",
+"3","MV2_set_scatter_tuning_table","4","17728","4","17728",
+"3","MV2_set_gather_tuning_table","4","17728","4","17728",
+"4","MV2_set_scatter_tuning_table","4","17728","4","17728",
+"4","MV2_set_gather_tuning_table","4","17728","4","17728",
+"5","MV2_set_scatter_tuning_table","4","17728","4","17728",
+"5","MV2_set_gather_tuning_table","4","17728","4","17728",
+"6","MV2_set_scatter_tuning_table","4","17728","4","17728",
+"6","MV2_set_gather_tuning_table","4","17728","4","17728",
+"7","MV2_set_scatter_tuning_table","4","17728","4","17728",
+"7","MV2_set_gather_tuning_table","4","17728","4","17728"
+
+message (1-7): Memory error detected in main (mmult3.c:160):
+message (1-7): mprotect failed
+message (0): Memory error detected in main (mmult3.c:138):
+message (0): mprotect failed
+message: Stacks
+message: Processes Function                                   Variables
+message: 0         main (mmult3.c:138)                        [Rank=0, thread=1], argc=1, argv=0xffffffffd3f8, filename="res3_c.mat", mat_a=0x400b90, mat_b=0xffffffffd2c0, mat_c=0x401600, myrank=0, nproc=8, size=1024, slice=131072, st=<aggregate value>
+message: 0           malloc (malloc.c:1108)                   [Rank=0, thread=1], file=0x401248 "\240\203\034\370\250C]\270\b}\b\033\340\003\b*", size=8388608
+message: 0             dmalloc_malloc (malloc.c:861)          [Rank=0, thread=1], align=0, alignment=0, bt=<aggregate value>, file=0x401248 "\240\203\034\370\250C]\270\b}\b\033\340\003\b*", func_id=10, line=0, new_p=0x0, size=8388608, xalloc_b=0
+message: 0               _dmalloc_chunk_malloc (chunk.c:2723) [Rank=0, thread=1], alignment=0, block_n=281474976697408, bt=0xffffffffd130, disp_buf="\030\261o\277\377\377", fence_b=0, file=0x401248 "\240\203\034\370\250C]\270\b}\b\033\340\003\b*", func_id=10, guard=0, line=0, memkind_name=0xffffb7b02f90 "", needed_size=8388608, pnt_info=<aggregate value>, size=8388608, slot_p=0xffffb651b498, trans_log=0xffffffffcc70 "P\321\377\377\377\377", valloc_b=0, where_buf="\200\321\377\377\377\377"
+message: 0                 clear_alloc (chunk.c:1401)         [Rank=0, thread=1], end=0xffffb2d20000, func_id=10, info_p=0xffffffffcae0, num=65535, old_size=0, ret=-1, slot_p=0xffffb651b498, start=0xffffb2510000, start_p=0xffffb651b498 ""
+message: 0                   dmalloc_error (error.c:703)      [Rank=0, thread=1], func=0xffffb7afd608 "clear_alloc"
+message: 1-7       main (mmult3.c:160)                        [Rank=1, thread=1], argc=1, argv=0xffffffffd3f8, filename="res3_c.mat", mat_a=0x400b90, mat_b=0xffffffffd2c0, mat_c=0x401600, myrank=1, nproc=8, size=1024, slice=131072, st=<aggregate value>
+message: 1-7         malloc (malloc.c:1108)                   [Rank=1, thread=1], file=0x4013c8 "\240\203\034\370\251C]\270)}\t\033\340\003\t*", size=1048576
+message: 1-7           dmalloc_malloc (malloc.c:861)          [Rank=1, thread=1], align=0, alignment=0, bt=<aggregate value>, file=0x4013c8 "\240\203\034\370\251C]\270)}\t\033\340\003\t*", func_id=10, line=0, new_p=0xffffffffffffffff, size=1048576, xalloc_b=0
+message: 1-7             _dmalloc_chunk_malloc (chunk.c:2723) [Rank=1, thread=1], alignment=0, block_n=281474976697408, bt=0xffffffffd130, disp_buf="\030\261o\277\377\377", fence_b=0, file=0x4013c8 "\240\203\034\370\251C]\270)}\t\033\340\003\t*", func_id=10, guard=0, line=0, memkind_name=0xffffb7b02f90 "", needed_size=1048576, pnt_info=<aggregate value>, size=1048576, slot_p=0xffffb63b2f70, trans_log=0xffffffffcc70 "P\321\377\377\377\377", valloc_b=0, where_buf=""
+message: 1-7               clear_alloc (chunk.c:1401)         [Rank=1, thread=1], end=0xffffb4950000, func_id=10, info_p=0xffffffffcae0, num=65535, old_size=0, ret=-1, slot_p=0xffffb63b2f70, start=0xffffb4840000, start_p=0xffffb63b2f70 ""
+message: 1-7                 dmalloc_error (error.c:703)      [Rank=1, thread=1], func=0xffffb7afd608 "clear_alloc"
+message: Current Stack
+message: #5 main (argc=1, argv=0xffffffffd3f8) at /home/student001/Tutorial/02_Forge/04_offline_debugging/mmult3.c:138 (at 0x0000000000401248)
+message: #4 malloc (size=8388608) at /var/lib/jenkins/workspace/automated-release/tmp/ddt-2019-05-02-91282/code/ddt/dist/dmalloc/malloc.c:1108 (at 0x0000ffffb7aeef50)
+message: #3 dmalloc_malloc (file=0x401248 "\240\203\034\370\250C]\270\b}\b\033\340\003\b*", line=0, size=8388608, func_id=10, alignment=0, xalloc_b=0) at /var/lib/jenkins/workspace/automated-release/tmp/ddt-2019-05-02-91282/code/ddt/dist/dmalloc/malloc.c:861 (at 0x0000ffffb7aee914)
+message: #2 _dmalloc_chunk_malloc (file=0x401248 "\240\203\034\370\250C]\270\b}\b\033\340\003\b*", line=0, size=8388608, func_id=10, alignment=0, bt=0xffffffffd130, memkind_name=0xffffb7b02f90 "") at /var/lib/jenkins/workspace/automated-release/tmp/ddt-2019-05-02-91282/code/ddt/dist/dmalloc/chunk.c:2723 (at 0x0000ffffb7ae7778)
+message: #1 clear_alloc (slot_p=0xffffb651b498, info_p=0xffffffffcae0, old_size=0, func_id=10) at /var/lib/jenkins/workspace/automated-release/tmp/ddt-2019-05-02-91282/code/ddt/dist/dmalloc/chunk.c:1401 (at 0x0000ffffb7ae56d8)
+message: #0 dmalloc_error (func=0xffffb7afd608 "clear_alloc") at /var/lib/jenkins/workspace/automated-release/tmp/ddt-2019-05-02-91282/code/ddt/dist/dmalloc/error.c:703 (at 0x0000ffffb7aed254)

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#SBATCH --job-name=armddt
+#SBATCH --nodes=1
+#SBATCH --ntasks=8
+#SBATCH --time=00:30:00
+#SBATCH --output=armddt-%j.log
+#SBATCH --error=armddt-%j.err
+ 
+ddt --offline --output=final.html --mem-debug -np 8 ./*_c.exe
