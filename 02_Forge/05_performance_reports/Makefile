@@ -1,9 +1,9 @@
 include ../common/make.def
 
-DEBUG=1
+DEBUG=0
 
 CFLAGS=-g
-LFLAGS=
+LFLAGS=-lm
 
 ifeq ($(DEBUG),1)
 CFLAGS+=-O0 -DDEBUG
@@ -26,4 +26,4 @@ all: $(BIN_C) $(BIN_F)
 	$(FC) $(CFLAGS) -cpp $< -o $@ $(LFLAGS)
 
 clean:
-	-rm -f $(BIN_C) $(BIN_F) res*.mat initial.html
+	-rm -f $(BIN_C) $(BIN_F) res*.mat *.html *.txt
