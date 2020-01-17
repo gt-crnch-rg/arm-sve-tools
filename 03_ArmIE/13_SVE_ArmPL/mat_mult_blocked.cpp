@@ -132,10 +132,6 @@ int main(int argc, char** argv)
     std::chrono::duration<double> time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
     printf("Set up of matrices took: %.3lf seconds\n", time_span.count());
 
-    // Perform the matrix-matrix multiplication naively
-    printf("Performing naive multiply\n");
-    naive_multiply(matA, matB, matC, n, m, l);
-
     // Perform the matrix-matrix multiplication with a bit of blocking and
     // loop unrolling
     printf("Performing blocked multiply\n");
