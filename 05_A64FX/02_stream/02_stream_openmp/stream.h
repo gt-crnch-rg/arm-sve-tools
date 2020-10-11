@@ -40,60 +40,52 @@
 /*     program constitutes acceptance of these licensing restrictions.   */
 /*  5. Absolutely no warranty is expressed or implied.                   */
 /*-----------------------------------------------------------------------*/
-#include <stdio.h>
-#include <stdlib.h>
-#include <stddef.h>
+#ifndef __STREAM_H__
+#define __STREAM_H__
 
-#include "stream.h"
+#ifndef STREAM_ARRAY_SIZE
+#define STREAM_ARRAY_SIZE 10000000
+#endif
 
+#ifdef NTIMES
+#if NTIMES<=1
+#define NTIMES 10
+#endif
+#endif
+#ifndef NTIMES
+#define NTIMES 10
+#endif
 
-void stream_allocate(stream_t ** a, stream_t ** b, stream_t ** c)
-{
-  size_t const size = sizeof(STREAM_TYPE) * (STREAM_ARRAY_SIZE + OFFSET);
-  printf("size=%zd\n", size);
-  if (NULL == (*a = (STREAM_TYPE*)malloc(size))) {
-    fprintf(stderr, "Failed to allocated %zd bytes for a\n", size);
-    exit(1);
-  }
-  if (NULL == (*b = (STREAM_TYPE*)malloc(size))) {
-    fprintf(stderr, "Failed to allocated %zd bytes for b\n", size);
-    exit(1);
-  }
-  if (NULL == (*c = (STREAM_TYPE*)malloc(size))) {
-    fprintf(stderr, "Failed to allocated %zd bytes for c\n", size);
-    exit(1);
-  }
-}
+#ifndef OFFSET
+#define OFFSET 0
+#endif
 
-void stream_copy(stream_t * c, stream_t * a)
-{
-  #pragma omp parallel for
-  for (size_t j=0; j<STREAM_ARRAY_SIZE; ++j) {
-    c[j] = a[j];
-  }
-}
+#define HLINE "-------------------------------------------------------------\n"
 
-void stream_scale(stream_t scalar, stream_t * b, stream_t * c)
-{
-  #pragma omp parallel for
-  for (size_t j=0; j<STREAM_ARRAY_SIZE; ++j) {
-    b[j] = scalar*c[j];
-  }
-}
+#ifndef MIN
+#define MIN(x,y) ((x)<(y)?(x):(y))
+#endif
+#ifndef MAX
+#define MAX(x,y) ((x)>(y)?(x):(y))
+#endif
+#ifndef abs
+#define abs(a) ((a) >= 0 ? (a) : -(a))
+#endif
 
-void stream_add(stream_t * c, stream_t * a, stream_t * b)
-{
-  #pragma omp parallel for
-  for (size_t j=0; j<STREAM_ARRAY_SIZE; ++j) {
-    c[j] = a[j] + b[j];
-  }
-}
+#ifndef STREAM_TYPE
+#define STREAM_TYPE double
+#endif
 
-void stream_triad(stream_t scalar, stream_t * a, stream_t * b, stream_t * c)
-{
-  #pragma omp parallel for
-  for (size_t j=0; j<STREAM_ARRAY_SIZE; j++) {
-    a[j] = b[j] + scalar*c[j];
-  }
-} 
+typedef STREAM_TYPE stream_t;
 
+void stream_allocate(stream_t ** a, stream_t ** b, stream_t ** c);
+
+void stream_copy(stream_t * c, stream_t * a);
+
+void stream_scale(stream_t scalar, stream_t * b, stream_t * c);
+
+void stream_add(stream_t * c, stream_t * a, stream_t * b);
+
+void stream_triad(stream_t scalar, stream_t * a, stream_t * b, stream_t * c);
+
+#endif /* __STREAM_H__ */

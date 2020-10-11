@@ -43,54 +43,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
-#include <omp.h>
 
 #include "stream.h"
 
 
-/* The zfill distance must be large enough to be ahead of the L2 prefetcher */
-static const int ZFILL_DISTANCE = 100;
-
-/* 256-byte cache lines */
-static const int ELEM_PER_CACHE_LINE = 256 / sizeof(stream_t);
-
-/* Offset from a[j] to zfill */
-static const int ZFILL_OFFSET = ZFILL_DISTANCE * ELEM_PER_CACHE_LINE;
-
-
-static inline void zfill(stream_t * a){
-  asm volatile("dc zva, %0": : "r"(a));
-}
-
-
 void stream_allocate(stream_t ** a, stream_t ** b, stream_t ** c)
 {
-  if (STREAM_ARRAY_SIZE % ELEM_PER_CACHE_LINE) {
-    fprintf(stderr, "STREAM_ARRAY_SIZE=%zd is not a multiple of ELEM_PER_CACHE_LINE=%zd\n",
-        STREAM_ARRAY_SIZE, ELEM_PER_CACHE_LINE);
-    exit(EXIT_FAILURE);
-  }
   size_t const size = sizeof(STREAM_TYPE) * (STREAM_ARRAY_SIZE + OFFSET);
-  printf("size=%zd\n", size);
   if (NULL == (*a = (STREAM_TYPE*)malloc(size))) {
     fprintf(stderr, "Failed to allocated %zd bytes for a\n", size);
-    exit(EXIT_FAILURE);
+    exit(1);
   }
   if (NULL == (*b = (STREAM_TYPE*)malloc(size))) {
     fprintf(stderr, "Failed to allocated %zd bytes for b\n", size);
-    exit(EXIT_FAILURE);
+    exit(1);
   }
   if (NULL == (*c = (STREAM_TYPE*)malloc(size))) {
     fprintf(stderr, "Failed to allocated %zd bytes for c\n", size);
-    exit(EXIT_FAILURE);
+    exit(1);
   }
 }
 
-
 void stream_copy(stream_t * c, stream_t * a)
 {
-
-  #pragma omp parallel for
   for (size_t j=0; j<STREAM_ARRAY_SIZE; ++j) {
     c[j] = a[j];
   }
@@ -98,7 +73,6 @@ void stream_copy(stream_t * c, stream_t * a)
 
 void stream_scale(stream_t scalar, stream_t * b, stream_t * c)
 {
-  #pragma omp parallel for
   for (size_t j=0; j<STREAM_ARRAY_SIZE; ++j) {
     b[j] = scalar*c[j];
   }
@@ -106,7 +80,6 @@ void stream_scale(stream_t scalar, stream_t * b, stream_t * c)
 
 void stream_add(stream_t * c, stream_t * a, stream_t * b)
 {
-  #pragma omp parallel for
   for (size_t j=0; j<STREAM_ARRAY_SIZE; ++j) {
     c[j] = a[j] + b[j];
   }
@@ -114,30 +87,8 @@ void stream_add(stream_t * c, stream_t * a, stream_t * b)
 
 void stream_triad(stream_t scalar, stream_t * a, stream_t * b, stream_t * c)
 {
-  #pragma omp parallel
-  {
-    int const tid = omp_get_thread_num();
-    int const nthreads = omp_get_num_threads();
-    size_t const work_chunk = STREAM_ARRAY_SIZE / nthreads;
-    size_t const loop_chunk = (STREAM_ARRAY_SIZE / ELEM_PER_CACHE_LINE) / nthreads;
-
-    stream_t * const zfill_limit = a + (tid+1)*work_chunk - ZFILL_OFFSET;
-
-    #pragma omp for schedule(static,loop_chunk)
-    for (size_t j=0; j<STREAM_ARRAY_SIZE; j+=ELEM_PER_CACHE_LINE) {
-      stream_t * restrict const aj = a + j;
-      stream_t const * restrict const bj = b + j;
-      stream_t const * restrict const cj = c + j;
-
-      if (aj+ZFILL_OFFSET < zfill_limit) {
-        zfill(aj+ZFILL_OFFSET);
-      }
-
-      for (int i=0; i<ELEM_PER_CACHE_LINE; ++i) {
-        aj[i] = bj[i] + scalar*cj[i];
-      }
-    }
-
-  } // parallel
+  for (size_t j=0; j<STREAM_ARRAY_SIZE; j++) {
+    a[j] = b[j] + scalar*c[j];
+  }
 } 
 
