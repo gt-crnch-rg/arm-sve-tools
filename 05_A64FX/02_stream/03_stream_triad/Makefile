@@ -23,8 +23,7 @@ all: $(EXE)
 clean:
 	rm -f $(OBJS) $(EXE)
 
-run: $(EXE)
-	$(RUN) ./$^
+run: run-perf
 
 run-perf: $(EXE)
 	# r11:   CPU_CYCLES: This event counts every cycle
