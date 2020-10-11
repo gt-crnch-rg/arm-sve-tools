@@ -14,7 +14,7 @@ RUN = $(OMP_ENV) $(NUMACTL)
 CC = gcc
 CFLAGS = -Ofast -mcpu=a64fx -fopenmp -DSTREAM_ARRAY_SIZE=$(STREAM_ARRAY_SIZE)UL -DNTIMES=$(NTIMES)
 
-FLAVOR = openmp
+FLAVOR = zfill-acle
 EXE = stream_$(FLAVOR).exe
 
 SRCS = $(wildcard *.c)

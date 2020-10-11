@@ -9,17 +9,16 @@ CFLAGS = -DSTREAM_ARRAY_SIZE=$(STREAM_ARRAY_SIZE)UL -DNTIMES=$(NTIMES)
 FLAVOR = vanilla
 EXE = stream_$(FLAVOR).exe
 
-EXES = $(VANILLA_EXE)
 SRCS = $(wildcard *.c)
 HDRS = $(wildcard *.h)
 OBJS = $(SRCS:.c=.o)
 
 .PHONY: all clean run
 
-all: $(EXES)
+all: $(EXE)
 
 clean:
-	rm -f $(OBJS) $(EXES)
+	rm -f $(OBJS) $(EXE)
 
 run: $(EXE)
 	$(RUN) ./$^

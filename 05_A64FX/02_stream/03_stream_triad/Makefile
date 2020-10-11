@@ -1,20 +1,15 @@
-NTIMES = 20
+NTIMES = 10
 
-# Total memory: 24GB 
-STREAM_ARRAY_SIZE = 1073741824
-# Total memory: 6GB
-#STREAM_ARRAY_SIZE = 268435440
-# A convinent stream size: (48[cores] * 32[elem per cache line] * 400000)
-#STREAM_ARRAY_SIZE = 614400000
+STREAM_ARRAY_SIZE = 10000000
 
-OMP_ENV = OMP_NUM_THREADS=48 OMP_PROC_BIND=close
-#NUMACTL = numactl -C 0-47 -l
+OMP_ENV = OMP_NUM_THREADS=1 OMP_PROC_BIND=close
+NUMACTL = numactl -m 0 -C 0
 RUN = $(OMP_ENV) $(NUMACTL)
 
 CC = gcc
 CFLAGS = -Ofast -mcpu=a64fx -fopenmp -DSTREAM_ARRAY_SIZE=$(STREAM_ARRAY_SIZE)UL -DNTIMES=$(NTIMES)
 
-FLAVOR = openmp
+FLAVOR = triad
 EXE = stream_$(FLAVOR).exe
 
 SRCS = $(wildcard *.c)
@@ -43,11 +38,11 @@ run-perf: $(EXE)
 	# r184:  every cycle that no instruction was committed because 
 	#        the oldest and uncommitted load/store/prefetch operation 
 	#        waits for L1D cache, L2 cache and memory access.
-	# r191:  1INST_COMMIT: cycles where one instruction is committed.
-	# r192:  2INST_COMMIT: cycles where two instructions are committed.
-	# r193:  3INST_COMMIT: cycles where three instructions are committed.
-	# r194:  4INST_COMMIT: cycles where four instructions are committed.
-	$(RUN) perf stat -e r11,r23,r24,r184,r191,r192,r193,r194 ./$(EXE)
+	# r8085: executed operations that read from memory due to SVE 
+	#        and Advanced SIMD load instructions.
+	# r8086: executed operations that write to memory due to SVE 
+	#        and Advanced SIMD store instructions.
+	$(RUN) perf stat -e r11,r23,r24,r184,r8085,r8086 ./$(EXE)
 
 $(EXE): stream.o kernel-$(FLAVOR).o
 	$(CC) $(CFLAGS) -o $@ $^

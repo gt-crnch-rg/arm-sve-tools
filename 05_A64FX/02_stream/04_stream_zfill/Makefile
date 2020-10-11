@@ -8,13 +8,13 @@ STREAM_ARRAY_SIZE = 1073741824
 #STREAM_ARRAY_SIZE = 614400000
 
 OMP_ENV = OMP_NUM_THREADS=48 OMP_PROC_BIND=close
-#NUMACTL = numactl -C 0-47 -l
+NUMACTL = numactl -C 0-47 -l
 RUN = $(OMP_ENV) $(NUMACTL)
 
 CC = gcc
 CFLAGS = -Ofast -mcpu=a64fx -fopenmp -DSTREAM_ARRAY_SIZE=$(STREAM_ARRAY_SIZE)UL -DNTIMES=$(NTIMES)
 
-FLAVOR = openmp
+FLAVOR = zfill
 EXE = stream_$(FLAVOR).exe
 
 SRCS = $(wildcard *.c)
