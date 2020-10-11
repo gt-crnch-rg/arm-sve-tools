@@ -273,7 +273,7 @@ int main(int argc, char ** argv)
 
     printf(HLINE);
 
-    #pragma omp parallel for schedule(static) default(shared) private(j)
+    #pragma omp parallel for
     for (j=0; j<STREAM_ARRAY_SIZE; ++j) {
         a[j] = 1.0;
         b[j] = 2.0;
@@ -291,7 +291,7 @@ int main(int argc, char ** argv)
     }
 
     t = mysecond();
-    #pragma omp parallel for schedule(static) default(shared) private(j)
+    #pragma omp parallel for
     for (j=0; j<STREAM_ARRAY_SIZE; ++j) {
         a[j] = 2.0E0 * a[j];
     }
