@@ -54,9 +54,16 @@
 #include "stream.h"
 
 
-static STREAM_TYPE * a;
-static STREAM_TYPE * b;
-static STREAM_TYPE * c;
+#if STREAM_ARRAY_DYNAMIC == 1
+static STREAM_TYPE * _a;
+static STREAM_TYPE * _b;
+static STREAM_TYPE * _c;
+#else
+static STREAM_TYPE a[STREAM_ARRAY_SIZE+OFFSET],
+                   b[STREAM_ARRAY_SIZE+OFFSET],
+                   c[STREAM_ARRAY_SIZE+OFFSET];
+#endif
+
 
 static double avgtime[4] = { 0 },
               maxtime[4] = { 0 },
@@ -73,14 +80,12 @@ static double bytes[4] = {
         3 * sizeof(STREAM_TYPE) * STREAM_ARRAY_SIZE,
         3 * sizeof(STREAM_TYPE) * STREAM_ARRAY_SIZE };
 
-
 static double mysecond()
 {
     struct timeval tp;
     struct timezone tzp;
-    int i;
 
-    i = gettimeofday(&tp, &tzp);
+    gettimeofday(&tp, &tzp);
     return ((double) tp.tv_sec + (double) tp.tv_usec * 1.e-6);
 }
 
@@ -88,7 +93,7 @@ static int checktick()
 {
     const int M = 20;
     int i, minDelta, Delta;
-    double t1, t2, timesfound[M];
+    double t1, t2, timesfound[20];
 
     /*  Collect a sequence of M unique time values from the system. */
 
@@ -122,6 +127,12 @@ static void checkSTREAMresults()
     double epsilon;
     ssize_t j;
     int k, ierr, err;
+
+#if STREAM_ARRAY_DYNAMIC == 1
+    STREAM_TYPE * restrict const a = _a;
+    STREAM_TYPE * restrict const b = _b;
+    STREAM_TYPE * restrict const c = _c;
+#endif
 
     /* reproduce initialization */
     aj = 1.0;
@@ -241,7 +252,18 @@ int main(int argc, char ** argv)
 
     /* --- SETUP --- determine precision and check timing --- */
 
-    stream_allocate(&a, &b, &c);
+#if STREAM_ARRAY_DYNAMIC == 1
+#ifdef STREAM_KERNEL
+    stream_allocate(&_a, &_b, &_c);
+#else
+    _a = (STREAM_TYPE*)malloc(sizeof(STREAM_TYPE) * (STREAM_ARRAY_SIZE + OFFSET));
+    _b = (STREAM_TYPE*)malloc(sizeof(STREAM_TYPE) * (STREAM_ARRAY_SIZE + OFFSET));
+    _c = (STREAM_TYPE*)malloc(sizeof(STREAM_TYPE) * (STREAM_ARRAY_SIZE + OFFSET));
+#endif
+    STREAM_TYPE * restrict const a = _a;
+    STREAM_TYPE * restrict const b = _b;
+    STREAM_TYPE * restrict const c = _c;
+#endif
 
     BytesPerWord = sizeof(STREAM_TYPE);
     printf("This system uses %d bytes per array element.\n", BytesPerWord);
@@ -314,6 +336,7 @@ int main(int argc, char ** argv)
 
     scalar = 3.0;
     for (k = 0; k < NTIMES; k++) {
+#ifdef STREAM_KERNEL
         times[0][k] = mysecond();
         stream_copy(c, a);
         times[0][k] = mysecond() - times[0][k];
@@ -329,6 +352,28 @@ int main(int argc, char ** argv)
         times[3][k] = mysecond();
         stream_triad(scalar, a, b, c);
         times[3][k] = mysecond() - times[3][k];
+#else
+        times[0][k] = mysecond();
+        #pragma omp parallel for
+	for (j=0; j<STREAM_ARRAY_SIZE; j++)
+	    c[j] = a[j];
+        times[0][k] = mysecond() - times[0][k];
+        times[1][k] = mysecond();
+        #pragma omp parallel for
+	for (j=0; j<STREAM_ARRAY_SIZE; j++)
+	    b[j] = scalar*c[j];
+        times[1][k] = mysecond() - times[1][k];
+        times[2][k] = mysecond();
+        #pragma omp parallel for
+	for (j=0; j<STREAM_ARRAY_SIZE; j++)
+	    c[j] = a[j]+b[j];
+        times[2][k] = mysecond() - times[2][k];
+        times[3][k] = mysecond();
+        #pragma omp parallel for
+	for (j=0; j<STREAM_ARRAY_SIZE; j++)
+	    a[j] = b[j]+scalar*c[j];
+        times[3][k] = mysecond() - times[3][k];
+#endif
     }
 
     /*	--- SUMMARY --- */
