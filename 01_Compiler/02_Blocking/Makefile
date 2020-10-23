@@ -1,17 +1,38 @@
-CC=armclang
-CXX=armclang++
-CFLAGS=-g -Ofast -mcpu=native
-CXXFLAGS=${CFLAGS} -std=c++11
-LFLAGS=
+include ../config.mk
 
-VERSION_NUM=2
-SRC_NAME=mat_mult_${VERSION_NUM}.cpp
-EXEC_NAME=mat_mult_${VERSION_NUM}
+MATRIX_SIZE = 1024 1024 1024
+BLOCK_SIZE = 128
 
-all: mat_mult 
+SRC = mm_blk.cpp
 
-mat_mult: $(SRC_NAME)
-	$(CXX) $(CXXFLAGS) -o $(EXEC_NAME) $< $(LFLAGS)
+EXE_DEF       = mm_blk_$(COMPILER)_def.exe
+EXE_OPT       = mm_blk_$(COMPILER)_opt.exe
+EXE_OPT_NOVEC = mm_blk_$(COMPILER)_opt_novec.exe
+
+EXE = $(EXE_DEF) $(EXE_OPT) $(EXE_OPT_NOVEC)
+
+
+.PHONY: all clean run
+
+all: $(EXE)
 
 clean:
-	rm -rf $(EXEC_NAME) 
+	rm -f *.o *.exe *.opt.yaml
+
+run: $(EXE)
+	$(RUN) ./$(EXE_DEF) $(MATRIX_SIZE) $(BLOCK_SIZE)
+	$(RUN) ./$(EXE_OPT) $(MATRIX_SIZE) $(BLOCK_SIZE)
+	$(RUN) ./$(EXE_OPT_NOVEC) $(MATRIX_SIZE) $(BLOCK_SIZE)
+
+$(EXE_DEF): $(SRC)
+	$(call print_version)
+	$(CXX) $(CXXFLAGS_REPORT) -o $@ $<
+
+$(EXE_OPT): $(SRC)
+	$(call print_version)
+	$(CXX) $(CXXFLAGS_REPORT) $(CXXFLAGS_OPT) -o $@ $<
+
+$(EXE_OPT_NOVEC): $(SRC)
+	$(call print_version)
+	$(CXX) $(CXXFLAGS_REPORT) $(CXXFLAGS_OPT) $(CXXFLAGS_NOVEC) -o $@ $<
+

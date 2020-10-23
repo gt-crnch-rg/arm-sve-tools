@@ -10,24 +10,6 @@ inline unsigned int min(unsigned int a, unsigned int b)
     return (a < b) ? a : b;
 }
 
-void naive_multiply(double **matA, double **matB, double **matC, unsigned int n,
-        unsigned int m, unsigned int l)
-{
-    timer_clock::time_point t1= timer_clock::now();
-    unsigned int i, j, k;
-    // Perform the matrix-matrix multiplication naively
-    for (i= 0; i < n; ++i){
-        for (j= 0; j < l; ++j){
-            for (k= 0; k < m; ++k){
-                matC[i][j] += matA[i][k] * matB[k][j];
-            }
-        }
-    }
-    timer_clock::time_point t2= timer_clock::now();
-    std::chrono::duration<double> time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-    printf("Naive multiply took: %.3lf seconds\n", time_span.count());
-}
-
 void block_multiply(double **matA, double **matB, double **matC, unsigned int n,
         unsigned int m, unsigned int l, unsigned int blockSize)
 {
@@ -124,10 +106,6 @@ int main(int argc, char** argv)
     timer_clock::time_point t2= timer_clock::now();
     std::chrono::duration<double> time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
     printf("Set up of matrices took: %.3lf seconds\n", time_span.count());
-
-    // Perform the matrix-matrix multiplication naively
-    printf("Performing naive multiply\n");
-    naive_multiply(matA, matB, matC, n, m, l);
 
     // Perform the matrix-matrix multiplication with a bit of blocking and
     // loop unrolling

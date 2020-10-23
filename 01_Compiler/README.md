@@ -13,5 +13,16 @@ the kernel's runtime performance.  Each step of this tutorial improves
 on the performance of the previous step, so it's a good idea to take
 them in order.
 
-Different compilers optimize different loops differently.
+Comparing Compiler Performance
+==============================
+
+Different compilers optimize different code differently, so there will never
+be one compiler to rule them all.  You may need to try several compilers to
+find the one compiler that works best for your code.  To easily compare the
+performance of different compiers, add *COMPILER=_COMPILER_NAME_* to the make
+command line.  For example, to compile with Arm compilers:
+
+ `make all COMPILER=arm`
+
+Type `make COMPILER=help` to see all supported compilers.
 

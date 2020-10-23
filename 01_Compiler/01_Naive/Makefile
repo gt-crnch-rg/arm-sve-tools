@@ -1,6 +1,11 @@
 include ../config.mk
 
+# Experiment with compiler flags here
+CUSTOM_FLAGS = 
+
+# Input parameters for `make run`
 MATRIX_SIZE = 1024 1024 1024
+
 
 SRC = mm.cpp
 
@@ -17,6 +22,9 @@ all: $(EXE)
 
 clean:
 	rm -f *.o *.exe *.opt.yaml
+
+custom: $(SRC)
+	$(CXX) $(CUSTOM_FLAGS) -o mm_$(COMPILER)_custom.exe $<
 
 run: $(EXE)
 	$(RUN) ./$(EXE_DEF) $(MATRIX_SIZE)

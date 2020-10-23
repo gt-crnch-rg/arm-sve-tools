@@ -3,12 +3,15 @@
 #include <ctime>
 #include <chrono>
 
+
 using timer_clock= std::chrono::high_resolution_clock;
+
 
 inline unsigned int min(unsigned int a, unsigned int b)
 {
     return (a < b) ? a : b;
 }
+
 
 void naive_multiply(double **matA, double **matB, double **matC, unsigned int n,
         unsigned int m, unsigned int l)
@@ -27,6 +30,7 @@ void naive_multiply(double **matA, double **matB, double **matC, unsigned int n,
     std::chrono::duration<double> time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
     printf("Naive multiply took: %.3lf seconds\n", time_span.count());
 }
+
 
 int main(int argc, char** argv)
 {

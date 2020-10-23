@@ -1,15 +1,9 @@
-Compiler Comparison with Naive Matrix Multiplication
-====================================================
+Compiler Comparison with Blocked Matrix Multiplication
+======================================================
 
-This version of the code has a naive implementation of a 
-matrix-matrix multiplication.
-
-The binary is run with three command line options, which 
-represent the three dimensions of the matrices n, m, l. 
-This then represents the following matrix operation:
-
- > C[n][l] = A[n][m] * B[m][l]
-
+For this example we improve on the native matrix multiplication code
+by implementing a simple cache blocking scheme.  The block size is
+passed on the command line
 
 To compile run the code, simply type:
 
@@ -31,6 +25,7 @@ to remove build products:
 `make clean`
 
 Try building with different compilers and notice the relative performance of 
-each compiler.  Remember that **this is a naive, unoptimized code.** In the 
-next steps, we will explore how to improve on performace.
+each compiler. All compilers *should* show a significant performance gain in
+comparison to the native version.
+
 
