@@ -2,34 +2,35 @@
 #include <cstdio>
 #include <ctime>
 #include <chrono>
+
+#if defined(USE_ARMPL)
+
 #include <armpl.h>
-#include <omp.h>
+#define LIBRARY_NAME "ArmPL"
+
+#elif defined(USE_SSL2)
+
+#include <cssl.h>
+#define LIBRARY_NAME "SSL2"
+
+#elif defined(USE_CBLAS)
+
+#include <cblas.h>
+#define LIBRARY_NAME "CBLAS"
+
+#else
+#error Unsupported library
+#endif
+
 
 using timer_clock= std::chrono::high_resolution_clock;
+
 
 inline unsigned int min(unsigned int a, unsigned int b)
 {
     return (a < b) ? a : b;
 }
 
-void naive_multiply(double **matA, double **matB, double **matC, unsigned int n,
-        unsigned int m, unsigned int l)
-{
-    timer_clock::time_point t1= timer_clock::now();
-    unsigned int i, j, k;
-    // Perform the matrix-matrix multiplication naively
-#pragma omp parallel for private(i, j, k)
-    for (i= 0; i < n; ++i){
-        for (j= 0; j < l; ++j){
-            for (k= 0; k < m; ++k){
-                matC[i][j] += matA[i][k] * matB[k][j];
-            }
-        }
-    }
-    timer_clock::time_point t2= timer_clock::now();
-    std::chrono::duration<double> time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-    printf("Naive multiply took: %.3lf seconds\n", time_span.count());
-}
 
 void block_multiply(double **matA, double **matB, double **matC, unsigned int n,
         unsigned int m, unsigned int l, unsigned int blockSize)
@@ -39,7 +40,7 @@ void block_multiply(double **matA, double **matB, double **matC, unsigned int n,
     // Perform the matrix-matrix multiplication with a bit of blocking and
     // loop unrolling. We cheat with the loop unrolling, and just expect the
     // dimensions that are passed in to be a multiple of two.
-#pragma omp parallel for private(i, j, jj, k, kk)
+    #pragma omp parallel for collapse(2) private(i, j, jj, k, kk)
     for (kk= 0; kk < m; kk+= blockSize){
         for(jj= 0; jj < l; jj+= blockSize){
             for(i= 0; i < n; i+= 2){
@@ -58,6 +59,7 @@ void block_multiply(double **matA, double **matB, double **matC, unsigned int n,
     std::chrono::duration<double> time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
     printf("Block multiply took: %.3lf seconds\n", time_span.count());
 }
+
 
 int main(int argc, char** argv)
 {
@@ -109,7 +111,6 @@ int main(int argc, char** argv)
     }
 
     srand(time(NULL));
-#pragma omp parallel for private(i, j)
     for (i= 0; i < n; ++i){
         for (j= 0; j < m; ++j){
             matA[i][j]= ((double)rand()) / RAND_MAX;
@@ -120,7 +121,6 @@ int main(int argc, char** argv)
         }
     }
 
-#pragma omp parallel for private(i, j)
     for (i= 0; i < m; ++i){
         for (j= 0; j < l; ++j){
             matB[i][j]= ((double)rand()) / RAND_MAX;
@@ -133,17 +133,22 @@ int main(int argc, char** argv)
 
     // Perform the matrix-matrix multiplication with a bit of blocking and
     // loop unrolling
-    printf("Performing blocked multiply\n");
-    block_multiply(matA, matB, matC, n, m, l, blockSize);
+    //printf("Performing blocked multiply\n");
+    //block_multiply(matA, matB, matC, n, m, l, blockSize);
 
-    // Perform the matrix-matrix multiplication with the Arm libraries
+    // Perform the matrix-matrix multiplication with the library
     t1= timer_clock::now();
-    printf("Using optimised BLAS routine\n");
+    printf("Using BLAS routine from %s library\n", LIBRARY_NAME);
+#if defined(USE_ARMPL) || defined(USE_CBLAS)
     cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, n, m, l, 1, dataA,
             m, dataB, l, 1, dataC, m);
+#elif defined(USE_SSL2)
+    int icon, ierr;
+    ierr = c_dvmggm(dataA, m, dataB, l, dataC, l, n, m, l, &icon);
+#endif
     t2= timer_clock::now();
     time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-    printf("Arm Performance Library took: %.3lf seconds\n", time_span.count());
+    printf("%s library took: %.3lf seconds\n", LIBRARY_NAME, time_span.count());
 
     // Free memory
     free(matA);

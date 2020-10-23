@@ -1,7 +1,6 @@
 include ../config.mk
 
 MATRIX_SIZE = 1024 1024 1024
-BLOCK_SIZE = 128
 
 SRC = mm_lib.cpp
 
@@ -16,7 +15,7 @@ clean:
 	rm -f *.o *.exe *.opt.yaml
 
 run: $(EXE)
-	$(RUN) ./$(EXE) $(MATRIX_SIZE) $(BLOCK_SIZE)
+	$(RUN) ./$(EXE) $(MATRIX_SIZE)
 
 $(EXE): $(SRC)
 	$(call print_version)

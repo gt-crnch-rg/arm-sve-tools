@@ -13,21 +13,20 @@ FC = gfortran
 
 FLAGS_VERSION = --version
 
-FLAGS_REPORT = -fopt-info-vec-loop
-
-FLAGS_DEBUG = -g
-
 CFLAGS_OPT    = -Ofast -mcpu=native
 CFLAGS_NOVEC  = -fno-tree-vectorize
-CFLAGS_REPORT = $(FLAGS_REPORT)
+CFLAGS_REPORT = -fopt-info-vec-loop
+CFLAGS_OPENMP = -fopenmp
 
-CXXFLAGS_OPT    = -Ofast -mcpu=native
-CXXFLAGS_NOVEC  = -fno-tree-vectorize
-CXXFLAGS_REPORT = $(FLAGS_REPORT)
+CXXFLAGS_OPT    = $(CFLAGS_OPT)
+CXXFLAGS_NOVEC  = $(CFLAGS_NOVEC)
+CXXFLAGS_REPORT = $(CFLAGS_REPORT)
+CXXFLAGS_OPENMP = $(CFLAGS_OPENMP)
 
-FFLAGS_OPT    = -Ofast -mcpu=native
-FFLAGS_NOVEC  = -fno-tree-vectorize
-FFLAGS_REPORT = $(FLAGS_REPORT)
+FFLAGS_OPT    = $(CFLAGS_OPT)
+FFLAGS_NOVEC  = $(CFLAGS_NOVEC)
+FFLAGS_REPORT = $(CFLAGS_REPORT)
+FFLAGS_OPENMP = $(CFLAGS_OPENMP)
 
 else
 #############################################################################
@@ -43,21 +42,20 @@ FC = armflang
 
 FLAGS_VERSION = --version
 
-FLAGS_REPORT = -Rpass=\(loop-vectorize\|loop-unroll\) 
-
-FLAGS_DEBUG = -g
-
 CFLAGS_OPT    = -Ofast -mcpu=native
 CFLAGS_NOVEC  = -fno-vectorize
-CFLAGS_REPORT = $(FLAGS_REPORT)
+CFLAGS_REPORT = -Rpass=\(loop-vectorize\|loop-unroll\) 
+CFLAGS_OPENMP = -fopenmp
 
-CXXFLAGS_OPT    = -Ofast -mcpu=native
-CXXFLAGS_NOVEC  = -fno-vectorize
-CXXFLAGS_REPORT = $(FLAGS_REPORT)
+CXXFLAGS_OPT    = $(CFLAGS_OPT)
+CXXFLAGS_NOVEC  = $(CFLAGS_NOVEC)
+CXXFLAGS_REPORT = $(CFLAGS_REPORT)
+CXXFLAGS_OPENMP = $(CFLAGS_OPENMP)
 
-FFLAGS_OPT    = -Ofast -mcpu=native
-FFLAGS_NOVEC  = -fno-vectorize
-FFLAGS_REPORT = $(FLAGS_REPORT)
+FFLAGS_OPT    = $(CFLAGS_OPT)
+FFLAGS_NOVEC  = $(CFLAGS_NOVEC)
+FFLAGS_REPORT = $(CFLAGS_REPORT)
+FFLAGS_OPENMP = $(CFLAGS_OPENMP)
 
 else
 #############################################################################
@@ -73,21 +71,20 @@ FC = frt
 
 FLAGS_VERSION = --version
 
-FLAGS_REPORT =
-
-FLAGS_DEBUG = -g
-
 CFLAGS_OPT    = -Kfast
 CFLAGS_NOVEC  = -KNOSVE
-CFLAGS_REPORT = $(FLAGS_REPORT)
+CFLAGS_REPORT = 
+CFLAGS_OPENMP = -Kopenmp -Nfjomplib
 
-CXXFLAGS_OPT    = -Kfast
-CXXFLAGS_NOVEC  = -KNOSVE
-CXXFLAGS_REPORT = $(FLAGS_REPORT)
+CXXFLAGS_OPT    = $(CFLAGS_OPT)
+CXXFLAGS_NOVEC  = $(CFLAGS_NOVEC)
+CXXFLAGS_REPORT = $(CFLAGS_REPORT)
+CXXFLAGS_OPENMP = $(CFLAGS_OPENMP)
 
-FFLAGS_OPT    = -Kfast
-FFLAGS_NOVEC  = -KNOSVE
-FFLAGS_REPORT = $(FLAGS_REPORT)
+FFLAGS_OPT    = $(CFLAGS_OPT)
+FFLAGS_NOVEC  = $(CFLAGS_NOVEC)
+FFLAGS_REPORT = $(CFLAGS_REPORT)
+FFLAGS_OPENMP = $(CFLAGS_OPENMP)
 
 else
 #############################################################################
@@ -147,7 +144,8 @@ else
 ifeq (armpl,$(LIBRARY))
 
 ifeq (arm,$(COMPILER))
-# The Arm compiler automatically knows where to find ArmPL
+# The Arm compiler automatically knows where to find ArmPL and will 
+# automatically enable OpenMP if the -fopenmp flag is present
 CFLAGS_LIBRARY   = -armpl -DUSE_ARMPL
 CXXFLAGS_LIBRARY = -armpl -DUSE_ARMPL
 FFLAGS_LIBRARY   = -armpl -DUSE_ARMPL

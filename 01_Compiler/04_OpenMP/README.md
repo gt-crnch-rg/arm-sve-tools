@@ -1,13 +1,14 @@
-# Math Libraries for Matrix Multiplication
+OpenMP for thread-parallel matrix multiplication
+================================================
 
-Generally speaking, it's bad practice to write your own matrix multiplication
-kernel.  This operation has been well studied for decades and there are many
-extremely well-tuned implementations available.  Vendor-provided math libraries
-are usually the best choice, but open source packages like BLIS or OpenBLAS
-often deliver excellent performance as well.
+Many math libraries can use multiple threads to take advantage of the many
+cores available in modern CPUs.  In this example, we will use OpenMP to
+enable multi-threading inside various math libraries and compare performance.
 
-In this version of the matrix multiplication kernel, we have replaced our
-hand-written code with a call to a math library.
+A parallelized version of the cache blocked kernel is also provided. This
+version uses the OpenMP "collapse" clause to increase the parallel iteration
+count distributed among threads.  This enables higher thread counts and
+better supports the large number of cores found on modern CPUs.
 
 To compile run the code, simply type:
 

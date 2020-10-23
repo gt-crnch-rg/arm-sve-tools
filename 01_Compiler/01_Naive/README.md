@@ -1,5 +1,4 @@
-Compiler Comparison with Naive Matrix Multiplication
-====================================================
+# Compiler Comparison with Naive Matrix Multiplication
 
 This version of the code has a naive implementation of a 
 matrix-matrix multiplication.

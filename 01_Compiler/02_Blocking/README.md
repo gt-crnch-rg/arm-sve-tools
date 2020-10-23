@@ -1,5 +1,4 @@
-Compiler Comparison with Blocked Matrix Multiplication
-======================================================
+# Compiler Comparison with Blocked Matrix Multiplication
 
 For this example we improve on the native matrix multiplication code
 by implementing a simple cache blocking scheme.  The block size is
