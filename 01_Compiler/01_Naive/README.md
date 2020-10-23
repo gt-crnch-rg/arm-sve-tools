@@ -1,18 +1,18 @@
 # Compiler Comparison with Naive Matrix Multiplication
 
 This version of the code has a naive implementation of a 
-matrix-matrix multiplication.
+matrix-matrix multiplication. The binary is run with three 
+command line options, which represent the three dimensions 
+of the matrices $`n`$, $`m`$, and $`l`$.  This then represents the 
+following matrix operation:
 
-The binary is run with three command line options, which 
-represent the three dimensions of the matrices n, m, l. 
-This then represents the following matrix operation:
-
- > C[n][l] = A[n][m] * B[m][l]
-
+```math
+C_{nl} = A_{nm} \times B_{ml}
+```
 
 To compile run the code, simply type:
 
-`make`
+> `make`
 
 By default, this will use the GNU c++ compiler (g++) to build three versions
 of the executable:
@@ -22,12 +22,12 @@ of the executable:
 
 To run all three versions, type:
 
-`make run`
+> `make run`
 
 It's a good idea to clean between builds and runs.  Use the _clean_ make target
 to remove build products:
 
-`make clean`
+> `make clean`
 
 Try building with different compilers and notice the relative performance of 
 each compiler.  Remember that **this is a naive, unoptimized code.** In the 

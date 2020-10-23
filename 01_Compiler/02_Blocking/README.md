@@ -2,11 +2,9 @@
 
 For this example we improve on the native matrix multiplication code
 by implementing a simple cache blocking scheme.  The block size is
-passed on the command line
+passed on the command line To compile run the code, simply type:
 
-To compile run the code, simply type:
-
-`make`
+> `make`
 
 By default, this will use the GNU c++ compiler (g++) to build three versions
 of the executable:
@@ -16,12 +14,12 @@ of the executable:
 
 To run all three versions, type:
 
-`make run`
+> `make run`
 
 It's a good idea to clean between builds and runs.  Use the _clean_ make target
 to remove build products:
 
-`make clean`
+> `make clean`
 
 Try building with different compilers and notice the relative performance of 
 each compiler. All compilers *should* show a significant performance gain in
