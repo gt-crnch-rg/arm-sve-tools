@@ -19,7 +19,7 @@ You can specify a compiler and/or math library by typing:
 > `make [COMPILER=compiler_name] [LIBRARY=library_name]`
 
 The optional COMPILER and LIBRARY variables are used to specify the compiler
-and math library you would like to use.  For example:
+and math library you would like to use. For example:
 
 > `make COMPILER=arm`
 
@@ -36,6 +36,8 @@ For example:
 > `make COMPILER=fujitsu`
 
 This will use Fujitsu's SSL II math library to perform matrix multiplication.
+Type `make COMPILER=help` to see all supported compilers, or type 
+`make LIBRARY=help` to see supported libraries.
 
 It's a good idea to clean between builds and runs.  Use the _clean_ make target
 to remove build products:
