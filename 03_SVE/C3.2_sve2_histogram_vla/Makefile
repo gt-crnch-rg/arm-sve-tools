@@ -54,4 +54,4 @@ clean:
 
 .PHONY: run
 run: all
-	$(BUILDDIR)/$(EXE)
+	$(ARMIE) $(ARMIE_FLAGS) $(BUILDDIR)/$(EXE)
