@@ -25,9 +25,39 @@
 
 using timer_clock= std::chrono::high_resolution_clock;
 
+
 inline unsigned int min(unsigned int a, unsigned int b)
 {
     return (a < b) ? a : b;
+}
+
+
+void openmp_multiply(double **matA, double **matB, double **matC, unsigned int n,
+        unsigned int m, unsigned int l, unsigned int blockSize)
+{
+    timer_clock::time_point t1= timer_clock::now();
+    unsigned int i, j, jj, k, kk;
+    // Perform the matrix-matrix multiplication with a bit of blocking and
+    // loop unrolling. We cheat with the loop unrolling, and just expect the
+    // dimensions that are passed in to be a multiple of two.
+    #pragma omp parallel for collapse(2) private(i, j, jj, k, kk)
+    for (kk= 0; kk < m; kk+= blockSize){
+        for(jj= 0; jj < l; jj+= blockSize){
+            for(i= 0; i < n; i+= 2){
+                for(j= jj; j < min(l, jj + blockSize); j+= 2){
+                    for(k =kk; k < min(m, kk + blockSize); ++k){
+                        matC[i][j] += matA[i][k] * matB[k][j];
+                        matC[i][j+1] += matA[i][k] * matB[k][j+1];
+                        matC[i+1][j] += matA[i+1][k] * matB[k][j];
+                        matC[i+1][j+1] += matA[i+1][k] * matB[k][j+1];
+                    }
+                }
+            }
+        }
+    }
+    timer_clock::time_point t2= timer_clock::now();
+    std::chrono::duration<double> time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
+    printf("OpenMP multiply took: %.3lf seconds\n", time_span.count());
 }
 
 
@@ -46,17 +76,19 @@ int main(int argc, char** argv)
     // C = n x l matrix
     
     unsigned int n, m, l;
+    unsigned int blockSize;
 
-    unsigned int i, j;
+    unsigned int i, j, k;
 
-    if (argc < 4){
-        printf("Usage: %s n m l\n", argv[0]);
+    if (argc < 5){
+        printf("Usage: %s n m l blockSize\n", argv[0]);
         return 1;
     }
 
     n= (unsigned int)atoi(argv[1]);
     m= (unsigned int)atoi(argv[2]);
     l= (unsigned int)atoi(argv[3]);
+    blockSize= (unsigned int)atoi(argv[4]);
 
     // Assign memory
     dataA= (double*)malloc(n*m*sizeof(double));
@@ -99,13 +131,19 @@ int main(int argc, char** argv)
     std::chrono::duration<double> time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
     printf("Set up of matrices took: %.3lf seconds\n", time_span.count());
 
+    // Perform the matrix-matrix multiplication with a bit of blocking and
+    // loop unrolling
+    printf("Performing multiply\n");
+    openmp_multiply(matA, matB, matC, n, m, l, blockSize);
+
     // Perform the matrix-matrix multiplication with the library
     t1= timer_clock::now();
-    printf("Using BLAS routine from %s library\n", LIBRARY_NAME);
 #if defined(USE_ARMPL) || defined(USE_CBLAS)
+    printf("Using DGEMM routine from %s library\n", LIBRARY_NAME);
     cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, n, m, l, 1, dataA,
             m, dataB, l, 1, dataC, m);
 #elif defined(USE_SSL2)
+    printf("Using DVMGGM routine from %s library\n", LIBRARY_NAME);
     int icon, ierr;
     ierr = c_dvmggm(dataA, m, dataB, l, dataC, l, n, m, l, &icon);
 #endif

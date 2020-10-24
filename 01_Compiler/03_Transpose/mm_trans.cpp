@@ -3,36 +3,14 @@
 #include <ctime>
 #include <chrono>
 
-#if defined(USE_ARMPL)
-
-#include <armpl.h>
-#define LIBRARY_NAME "ArmPL"
-
-#elif defined(USE_SSL2)
-
-#include <cssl.h>
-#define LIBRARY_NAME "SSL2"
-
-#elif defined(USE_CBLAS)
-
-#include <cblas.h>
-#define LIBRARY_NAME "CBLAS"
-
-#else
-#error Unsupported library
-#endif
-
-
 using timer_clock= std::chrono::high_resolution_clock;
-
 
 inline unsigned int min(unsigned int a, unsigned int b)
 {
     return (a < b) ? a : b;
 }
 
-
-void block_multiply(double **matA, double **matB, double **matC, unsigned int n,
+void transpose_multiply(double **matA, double **matBT, double **matC, unsigned int n,
         unsigned int m, unsigned int l, unsigned int blockSize)
 {
     timer_clock::time_point t1= timer_clock::now();
@@ -40,16 +18,15 @@ void block_multiply(double **matA, double **matB, double **matC, unsigned int n,
     // Perform the matrix-matrix multiplication with a bit of blocking and
     // loop unrolling. We cheat with the loop unrolling, and just expect the
     // dimensions that are passed in to be a multiple of two.
-    #pragma omp parallel for collapse(2) private(i, j, jj, k, kk)
     for (kk= 0; kk < m; kk+= blockSize){
         for(jj= 0; jj < l; jj+= blockSize){
             for(i= 0; i < n; i+= 2){
                 for(j= jj; j < min(l, jj + blockSize); j+= 2){
                     for(k =kk; k < min(m, kk + blockSize); ++k){
-                        matC[i][j] += matA[i][k] * matB[k][j];
-                        matC[i][j+1] += matA[i][k] * matB[k][j+1];
-                        matC[i+1][j] += matA[i+1][k] * matB[k][j];
-                        matC[i+1][j+1] += matA[i+1][k] * matB[k][j+1];
+                        matC[i][j] += matA[i][k] * matBT[j][k];
+                        matC[i][j+1] += matA[i][k] * matBT[j+1][k];
+                        matC[i+1][j] += matA[i+1][k] * matBT[j][k];
+                        matC[i+1][j+1] += matA[i+1][k] * matBT[j+1][k];
                     }
                 }
             }
@@ -57,16 +34,15 @@ void block_multiply(double **matA, double **matB, double **matC, unsigned int n,
     }
     timer_clock::time_point t2= timer_clock::now();
     std::chrono::duration<double> time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-    printf("Block multiply took: %.3lf seconds\n", time_span.count());
+    printf("Transpose multiply took: %.3lf seconds\n", time_span.count());
 }
-
 
 int main(int argc, char** argv)
 {
     double *dataA= NULL;
     double **matA= NULL;
     double *dataB= NULL;
-    double **matB= NULL;
+    double **matBT= NULL;
     double *dataC= NULL;
     double **matC= NULL;
 
@@ -74,6 +50,7 @@ int main(int argc, char** argv)
     // A = n x m matrix
     // B = m x l matrix
     // C = n x l matrix
+    // B is stored transposed as BT = l x m matrix
     
     unsigned int n, m, l;
     unsigned int blockSize;
@@ -94,7 +71,7 @@ int main(int argc, char** argv)
     dataA= (double*)malloc(n*m*sizeof(double));
     matA= (double**)malloc(n*sizeof(double*));
     dataB= (double*)malloc(m*l*sizeof(double));
-    matB= (double**)malloc(m*sizeof(double*));
+    matBT= (double**)malloc(l*sizeof(double*));
     dataC= (double*)malloc(n*l*sizeof(double));
     matC= (double**)malloc(n*sizeof(double*));
 
@@ -106,8 +83,8 @@ int main(int argc, char** argv)
         matC[i]= dataC + i*l;
     }
 
-    for(i= 0; i < m; ++i){
-        matB[i]= dataB + i*l;
+    for(i= 0; i < l; ++i){
+        matBT[i]= dataB + i*m;
     }
 
     srand(time(NULL));
@@ -121,9 +98,9 @@ int main(int argc, char** argv)
         }
     }
 
-    for (i= 0; i < m; ++i){
-        for (j= 0; j < l; ++j){
-            matB[i][j]= ((double)rand()) / RAND_MAX;
+    for (i= 0; i < l; ++i){
+        for (j= 0; j < m; ++j){
+            matBT[i][j]= ((double)rand()) / RAND_MAX;
         }
     }
 
@@ -133,27 +110,13 @@ int main(int argc, char** argv)
 
     // Perform the matrix-matrix multiplication with a bit of blocking and
     // loop unrolling
-    //printf("Performing blocked multiply\n");
-    //block_multiply(matA, matB, matC, n, m, l, blockSize);
-
-    // Perform the matrix-matrix multiplication with the library
-    t1= timer_clock::now();
-    printf("Using BLAS routine from %s library\n", LIBRARY_NAME);
-#if defined(USE_ARMPL) || defined(USE_CBLAS)
-    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, n, m, l, 1, dataA,
-            m, dataB, l, 1, dataC, m);
-#elif defined(USE_SSL2)
-    int icon, ierr;
-    ierr = c_dvmggm(dataA, m, dataB, l, dataC, l, n, m, l, &icon);
-#endif
-    t2= timer_clock::now();
-    time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-    printf("%s library took: %.3lf seconds\n", LIBRARY_NAME, time_span.count());
+    printf("Performing multiply\n");
+    transpose_multiply(matA, matBT, matC, n, m, l, blockSize);
 
     // Free memory
     free(matA);
     free(dataA);
-    free(matB);
+    free(matBT);
     free(dataB);
     free(matC);
     free(dataC);

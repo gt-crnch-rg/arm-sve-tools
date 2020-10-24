@@ -99,10 +99,10 @@ int main(int argc, char** argv)
 
     timer_clock::time_point t2= timer_clock::now();
     std::chrono::duration<double> time_span= std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-    printf("Initialisation of matrices took: %.3lf seconds\n", time_span.count());
+    printf("Set up of matrices took: %.3lf seconds\n", time_span.count());
 
     // Perform the matrix-matrix multiplication naively
-    printf("Performing naive multiply\n");
+    printf("Performing multiply\n");
     naive_multiply(matA, matB, matC, n, m, l);
 
     // Free memory

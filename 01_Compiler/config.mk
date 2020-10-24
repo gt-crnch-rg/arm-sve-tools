@@ -15,7 +15,7 @@ FLAGS_VERSION = --version
 
 CFLAGS_OPT    = -Ofast -mcpu=native
 CFLAGS_NOVEC  = -fno-tree-vectorize
-CFLAGS_REPORT = -fopt-info-vec-loop
+CFLAGS_REPORT = -fopt-info-all-vec
 CFLAGS_OPENMP = -fopenmp
 
 CXXFLAGS_OPT    = $(CFLAGS_OPT)
@@ -44,7 +44,7 @@ FLAGS_VERSION = --version
 
 CFLAGS_OPT    = -Ofast -mcpu=native
 CFLAGS_NOVEC  = -fno-vectorize
-CFLAGS_REPORT = -Rpass=\(loop-vectorize\|loop-unroll\) 
+CFLAGS_REPORT = -Rpass=\(loop-vectorize\) -Rpass-missed=\(loop-vectorize\)
 CFLAGS_OPENMP = -fopenmp
 
 CXXFLAGS_OPT    = $(CFLAGS_OPT)
@@ -187,5 +187,8 @@ endif
 endif
 #############################################################################
 
-print_version = @echo "------------------------------------------------" && $(CC) $(FLAGS_VERSION)
+print_hline = @echo "------------------------------------------------"
+print_version = $(CC) $(FLAGS_VERSION)
+print_banner = $(call print_hline) @echo $1 $(call print_hline)
+
 

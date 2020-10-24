@@ -1,6 +1,6 @@
 include ../config.mk
 
-MATRIX_SIZE = 2048 2048 2048
+MATRIX_SIZE = 1024 1024 1024
 BLOCK_SIZE = 128
 
 SRC = mm_omp.cpp
@@ -29,16 +29,26 @@ clean:
 	rm -f *.o *.exe *.opt.yaml
 
 run: $(EXE)
+	$(call print_hline)
 	./$(EXE_SER) $(MATRIX_SIZE) $(BLOCK_SIZE)
+	$(call print_hline)
 	OMP_NUM_THREADS=1 ./$(EXE_OMP) $(MATRIX_SIZE) $(BLOCK_SIZE)
+	$(call print_hline)
 	OMP_NUM_THREADS=2 ./$(EXE_OMP) $(MATRIX_SIZE) $(BLOCK_SIZE)
+	$(call print_hline)
 	OMP_NUM_THREADS=4 ./$(EXE_OMP) $(MATRIX_SIZE) $(BLOCK_SIZE)
+	$(call print_hline)
 	OMP_NUM_THREADS=8 ./$(EXE_OMP) $(MATRIX_SIZE) $(BLOCK_SIZE)
+	$(call print_hline)
 
 $(EXE_SER): $(SRC)
+	$(call print_hline)
 	$(call print_version)
 	$(CXX) $(CXXFLAGS_REPORT) $(CXXFLAGS_OPT) $(CXXFLAGS_LIBRARY) -o $@ $< $(LDFLAGS_LIBRARY)
+	$(call print_hline)
 
 $(EXE_OMP): $(SRC)
+	$(call print_hline)
 	$(call print_version)
 	$(CXX) $(CXXFLAGS_REPORT) $(CXXFLAGS_OPT) $(CXXFLAGS_OPENMP) $(CXXFLAGS_LIBRARY) -o $@ $< $(LDFLAGS_LIBRARY)
+	$(call print_hline)

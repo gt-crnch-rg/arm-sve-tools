@@ -1,16 +1,10 @@
-# Compiler Comparison with Naive Matrix Multiplication
+# Compiler Comparison with Transposed Matrix Multiplication
 
-This version of the code has a naive implementation of a 
-matrix-matrix multiplication. The binary is run with three 
-command line options, which represent the three dimensions 
-of the matrices $`n`$, $`m`$, and $`l`$.  This then represents the 
-following matrix operation:
-
-```math
-C_{nl} = A_{nm} \times B_{ml}
-```
-
-To compile the code, simply type:
+For this example we improve on the blocked matrix multiplication code
+by storing the $`B`$ matrix transposed.  This improves the data access
+pattern by iterating over the unit-stride dimension in both A and B
+in the innermost loop of the matrix mulitplication kernel. To compile 
+the code, simply type:
 
 > `make`
 
@@ -30,6 +24,7 @@ to remove build products:
 > `make clean`
 
 Try building with different compilers and notice the relative performance of 
-each compiler.  Remember that **this is a naive, unoptimized code.** In the 
-next steps, we will explore how to improve on performace.
+each compiler. All compilers *should* show a significant performance gain in
+comparison to the native version.
+
 

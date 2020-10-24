@@ -2,7 +2,7 @@
 
 For this example we improve on the native matrix multiplication code
 by implementing a simple cache blocking scheme.  The block size is
-passed on the command line To compile run the code, simply type:
+passed on the command line. To compile the code, simply type:
 
 > `make`
 

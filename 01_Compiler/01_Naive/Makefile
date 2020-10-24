@@ -1,8 +1,5 @@
 include ../config.mk
 
-# Experiment with compiler flags here
-CUSTOM_FLAGS = 
-
 # Input parameters for `make run`
 MATRIX_SIZE = 1024 1024 1024
 
@@ -23,23 +20,30 @@ all: $(EXE)
 clean:
 	rm -f *.o *.exe *.opt.yaml
 
-custom: $(SRC)
-	$(CXX) $(CUSTOM_FLAGS) -o mm_$(COMPILER)_custom.exe $<
-
 run: $(EXE)
+	$(call print_hline)
 	$(RUN) ./$(EXE_DEF) $(MATRIX_SIZE)
+	$(call print_hline)
 	$(RUN) ./$(EXE_OPT) $(MATRIX_SIZE)
+	$(call print_hline)
 	$(RUN) ./$(EXE_OPT_NOVEC) $(MATRIX_SIZE)
+	$(call print_hline)
 
 $(EXE_DEF): $(SRC)
+	$(call print_hline)
 	$(call print_version)
 	$(CXX) $(CXXFLAGS_REPORT) -o $@ $<
+	$(call print_hline)
 
 $(EXE_OPT): $(SRC)
+	$(call print_hline)
 	$(call print_version)
 	$(CXX) $(CXXFLAGS_REPORT) $(CXXFLAGS_OPT) -o $@ $<
+	$(call print_hline)
 
 $(EXE_OPT_NOVEC): $(SRC)
+	$(call print_hline)
 	$(call print_version)
 	$(CXX) $(CXXFLAGS_REPORT) $(CXXFLAGS_OPT) $(CXXFLAGS_NOVEC) -o $@ $<
+	$(call print_hline)
 

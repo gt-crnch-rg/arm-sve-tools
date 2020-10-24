@@ -5,11 +5,11 @@ MATRIX_SIZE = 1024 1024 1024
 BLOCK_SIZE = 128
 
 
-SRC = mm_blk.cpp
+SRC = mm_vec.cpp
 
-EXE_DEF       = mm_blk_$(COMPILER)_def.exe
-EXE_OPT       = mm_blk_$(COMPILER)_opt.exe
-EXE_OPT_NOVEC = mm_blk_$(COMPILER)_opt_novec.exe
+EXE_DEF       = mm_vec_$(COMPILER)_def.exe
+EXE_OPT       = mm_vec_$(COMPILER)_opt.exe
+EXE_OPT_NOVEC = mm_vec_$(COMPILER)_opt_novec.exe
 
 EXE = $(EXE_DEF) $(EXE_OPT) $(EXE_OPT_NOVEC)
 

@@ -15,8 +15,12 @@ clean:
 	rm -f *.o *.exe *.opt.yaml
 
 run: $(EXE)
+	$(call print_hline)
 	$(RUN) ./$(EXE) $(MATRIX_SIZE)
+	$(call print_hline)
 
 $(EXE): $(SRC)
+	$(call print_hline)
 	$(call print_version)
 	$(CXX) $(CXXFLAGS_REPORT) $(CXXFLAGS_OPT) $(CXXFLAGS_LIBRARY) -o $@ $< $(LDFLAGS_LIBRARY)
+	$(call print_hline)
