@@ -18,7 +18,7 @@
 
 include ../../config.mk
 
-EXE = vecmax
+EXE = fir_f32
 
 SRCDIR = ./src
 BUILDDIR = ./build
@@ -51,3 +51,7 @@ executable: $(OBJ_C) $(SRC_ASM)
 .PHONY: clean
 clean:
 	rm -fv $(BUILDDIR)/*.d $(BUILDDIR)/*.s $(BUILDDIR)/$(EXE)
+
+.PHONY: run
+run: all
+	$(BUILDDIR)/$(EXE)

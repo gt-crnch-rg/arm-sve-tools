@@ -18,36 +18,42 @@
 
 include ../../config.mk
 
-EXE = fir_f32
+EXE = integral_image_vls128
 
 SRCDIR = ./src
 BUILDDIR = ./build
 
 CFLAGS = $(CFLAGS_OPT)
 
-SRC_C := $(wildcard $(SRCDIR)/*.c)
-SRC_ASM := $(wildcard $(SRCDIR)/*.S)
+COMPFLAGS = -std=c11 -MMD
 
-OBJ_C := $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.s, $(SRC_C))
+
+SRC := $(wildcard $(SRCDIR)/*.c)
+
+OBJ := $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.s, $(SRC))
 
 .PHONY: all
 all: build_directory executable
 
-DEPS := $(OBJ_C:%.s=%.d)
+DEPS := $(OBJ:%.s=%.d)
 
 -include $(DEPS)
 
 $(BUILDDIR)/%.s: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) $< -S -o $@
+	$(CC) $(CFLAGS) $(COMPFLAGS) $< -S -o $@
 
 .PHONY: build_directory
 build_directory:
 	@mkdir -pv $(BUILDDIR)
 
 .PHONY: executable
-executable: $(OBJ_C) $(SRC_ASM)
-	$(CC) $(CFLAGS) $^ -o $(BUILDDIR)/$(EXE)
+executable: $(OBJ)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $(BUILDDIR)/$(EXE)
 
 .PHONY: clean
 clean:
 	rm -fv $(BUILDDIR)/*.d $(BUILDDIR)/*.s $(BUILDDIR)/$(EXE)
+
+.PHONY: run
+run: all
+	$(BUILDDIR)/$(EXE)

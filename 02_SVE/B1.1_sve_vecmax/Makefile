@@ -18,37 +18,40 @@
 
 include ../../config.mk
 
-EXE = sobel
+EXE = vecmax
 
 SRCDIR = ./src
 BUILDDIR = ./build
 
 CFLAGS = $(CFLAGS_OPT)
 
-COMPFLAGS = -std=c11 -MMD
+SRC_C := $(wildcard $(SRCDIR)/*.c)
+SRC_ASM := $(wildcard $(SRCDIR)/*.S)
 
-SRC := $(wildcard $(SRCDIR)/*.c)
-
-OBJ := $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.s, $(SRC))
+OBJ_C := $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.s, $(SRC_C))
 
 .PHONY: all
 all: build_directory executable
 
-DEPS := $(OBJ:%.s=%.d)
+DEPS := $(OBJ_C:%.s=%.d)
 
 -include $(DEPS)
 
 $(BUILDDIR)/%.s: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) $(COMPFLAGS) $< -S -o $@
+	$(CC) $(CFLAGS) $< -S -o $@
 
 .PHONY: build_directory
 build_directory:
 	@mkdir -pv $(BUILDDIR)
 
 .PHONY: executable
-executable: $(OBJ)
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $(BUILDDIR)/$(EXE)
+executable: $(OBJ_C) $(SRC_ASM)
+	$(CC) $(CFLAGS) $^ -o $(BUILDDIR)/$(EXE)
 
 .PHONY: clean
 clean:
 	rm -fv $(BUILDDIR)/*.d $(BUILDDIR)/*.s $(BUILDDIR)/$(EXE)
+
+.PHONY: run
+run: all
+	$(BUILDDIR)/$(EXE)

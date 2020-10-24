@@ -52,3 +52,7 @@ executable: $(OBJ)
 .PHONY: clean
 clean:
 	rm -fv $(BUILDDIR)/*.d $(BUILDDIR)/*.s $(BUILDDIR)/$(EXE)
+
+.PHONY: run
+run: all
+	$(BUILDDIR)/$(EXE)

@@ -18,7 +18,7 @@
 
 include ../../config.mk
 
-EXE = integral_image_vla
+EXE = matmul_f64
 
 SRCDIR = ./src
 BUILDDIR = ./build
@@ -52,3 +52,7 @@ executable: $(OBJ)
 .PHONY: clean
 clean:
 	rm -fv $(BUILDDIR)/*.d $(BUILDDIR)/*.s $(BUILDDIR)/$(EXE)
+
+.PHONY: run
+run: all
+	$(BUILDDIR)/$(EXE)

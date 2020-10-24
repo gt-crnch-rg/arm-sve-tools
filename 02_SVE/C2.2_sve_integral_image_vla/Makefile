@@ -18,7 +18,7 @@
 
 include ../../config.mk
 
-EXE = integral_image_vls128
+EXE = integral_image_vla
 
 SRCDIR = ./src
 BUILDDIR = ./build
@@ -26,7 +26,6 @@ BUILDDIR = ./build
 CFLAGS = $(CFLAGS_OPT)
 
 COMPFLAGS = -std=c11 -MMD
-
 
 SRC := $(wildcard $(SRCDIR)/*.c)
 
@@ -53,3 +52,7 @@ executable: $(OBJ)
 .PHONY: clean
 clean:
 	rm -fv $(BUILDDIR)/*.d $(BUILDDIR)/*.s $(BUILDDIR)/$(EXE)
+
+.PHONY: run
+run: all
+	$(BUILDDIR)/$(EXE)

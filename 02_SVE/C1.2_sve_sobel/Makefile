@@ -18,7 +18,7 @@
 
 include ../../config.mk
 
-EXE = matmul_f64
+EXE = sobel
 
 SRCDIR = ./src
 BUILDDIR = ./build
@@ -52,3 +52,7 @@ executable: $(OBJ)
 .PHONY: clean
 clean:
 	rm -fv $(BUILDDIR)/*.d $(BUILDDIR)/*.s $(BUILDDIR)/$(EXE)
+
+.PHONY: run
+run: all
+	$(BUILDDIR)/$(EXE)
