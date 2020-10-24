@@ -34,9 +34,9 @@ clean:
 
 run: $(EXE)
 	$(call print_hline)
-	$(RUN) ./$(EXE1)
+	./$(EXE1)
 	$(call print_hline)
-	$(RUN) ./$(EXE2)
+	./$(EXE2)
 	$(call print_hline)
 
 $(EXE1): dotprod.c

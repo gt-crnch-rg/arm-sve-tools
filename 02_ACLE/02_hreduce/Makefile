@@ -35,11 +35,11 @@ clean:
 
 run: $(EXE)
 	$(call print_hline)
-	$(RUN) ./$(EXE1)
+	./$(EXE1)
 	$(call print_hline)
-	$(RUN) ./$(EXE2)
+	./$(EXE2)
 	$(call print_hline)
-	$(RUN) ./$(EXE3)
+	./$(EXE3)
 	$(call print_hline)
 
 $(EXE1): reduction_max.c

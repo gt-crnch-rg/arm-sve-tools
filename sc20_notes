@@ -1,0 +1,21 @@
+FMLA:
+
+Stream:
+
+Run single core
+Run OpenMP
+ => note BW gains but not close to peak
+Run OpenMP + perf
+ => feb vs. beb
+ => stalls due to wait on mem
+Run TRIAD + perf
+ => SVE instruction sanity check
+ => Point out that "hidden" read is not counted because we count instructions, not transfers
+Run ZFILL
+ => Compare feb vs. beb to OpenMP
+Run ACLE
+ => Better frontend, but it doesn't matter
+
+NPB: 
+Run EP.C with and w/o ArmPL
+ => With: 

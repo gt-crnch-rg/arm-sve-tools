@@ -34,7 +34,7 @@ clean:
 
 run: $(EXE)
 	$(call print_hline)
-	$(RUN) ./$(EXE) $(MATRIX_SIZE)
+	./$(EXE) $(MATRIX_SIZE)
 	$(call print_hline)
 
 $(EXE): $(SRC)

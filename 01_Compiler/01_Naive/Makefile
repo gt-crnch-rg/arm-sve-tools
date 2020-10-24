@@ -40,11 +40,11 @@ clean:
 
 run: $(EXE)
 	$(call print_hline)
-	$(RUN) ./$(EXE_DEF) $(MATRIX_SIZE)
+	./$(EXE_DEF) $(MATRIX_SIZE)
 	$(call print_hline)
-	$(RUN) ./$(EXE_OPT) $(MATRIX_SIZE)
+	./$(EXE_OPT) $(MATRIX_SIZE)
 	$(call print_hline)
-	$(RUN) ./$(EXE_OPT_NOVEC) $(MATRIX_SIZE)
+	./$(EXE_OPT_NOVEC) $(MATRIX_SIZE)
 	$(call print_hline)
 
 $(EXE_DEF): $(SRC)
