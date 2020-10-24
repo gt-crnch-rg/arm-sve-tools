@@ -16,7 +16,7 @@
 # from, out of or in connection with the Software or the use of Software.
 #------------------------------------------------------------------------------------
 
-COMPILER ?= gnu
+COMPILER ?= arm
 
 #############################################################################
 # GNU compiler flags
