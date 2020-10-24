@@ -1,15 +1,49 @@
 # SVE Programming Examples
 
-This directory contains several examples of hand-coded SVE and SVE2
-code (in Assembly or in C with SVE intrinsics) and the corresponding C
-reference code, and performs a comparison between the two as a test
-for functional correctness.
+This directory contains examples of hand-coded SVE and SVE2 code, either
+in Assembly or in C with the Arm C Language Extensions (SVE intrinsics).
+A corresponding C reference code is provided for functional correctness.
 
+These examples were taken from https://developer.arm.com/documentation/dai0548/latest
+and updated to separate SVE from SVE2 and better support native compilation
+on CPUs that implement SVE or SVE2.
 
-Run the command 'make' in each of the example directories
-software/<example>/ in order to compile the code and create an
-executable in the software/<example>/build/ directory. Run 'make
-clean' to clear the directory.
+## SVE vs SVE2
+
+SVE is the first generation of Arm's Scalable Vector Extension.  It introduces
+Arm's vector lenght agnostic programming approach and provides many powerful
+features to facilitate vectorization in complex codes.  Some of these features
+are reduction instructions for a number of arithmetic operations, extensive 
+load/store instruction support, predicate and loop control support, and logical 
+and bitwise instructions support. The SVE instruction set also provides thorough 
+floating-point arithmetic support, and basic integer arithmetic support.
+
+SVE2, the Scalable Vector Extension v2, is a superset of the Armv8-A SVE with 
+expanded functionality. The SVE2 instruction set adds thorough fixed-point 
+arithmetic support and features that benefit media processing workloads.
+
+Because SVE2 is a superset of SVE, CPUs that implement SVE2 can run SVE binaries
+without any modifications.  However, CPUs that only implement SVE (such as the
+Fujitsu A64FX) will not be able to run SVE2 binaries.  Attempting to run an SVE2
+binary on such a CPU will generate an Illegal Instruction error.  
+
+Use the Arm Instruction Emulator (ArmIE) to get started with SVE2 ahead of hardware 
+availability.
+
+## Usage
+
+Each example includes a makefile to compile and run the code. Run the 
+command `make` in each of the example directories to create an executable 
+in the `build` subdirectory.  Type `make run` to compile and run the code. 
+Run `make clean` to remove build products.  For example:
+
+```bash
+cd 06_matmul_f64
+make 
+make run
+make clean
+```
+
 
 The list of software examples:
 
