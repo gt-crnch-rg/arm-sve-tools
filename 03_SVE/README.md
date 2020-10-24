@@ -20,7 +20,7 @@ in the `build` subdirectory.  Type `make run` to compile and run the code.
 Run `make clean` to remove build products.  For example:
 
 ```bash
-cd 06_matmul_f64
+cd B5.1_sve_matmul_f64
 make 
 make run
 make clean
