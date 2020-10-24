@@ -23,7 +23,7 @@ EXE = vecdot_cs16
 SRCDIR = ./src
 BUILDDIR = ./build
 
-CFLAGS = $(CFLAGS_OPT)
+CFLAGS = $(CFLAGS_OPT) $(CFLAGS_SVE)
 
 SRC_C := $(wildcard $(SRCDIR)/*.c)
 SRC_ASM := $(wildcard $(SRCDIR)/*.S)
@@ -51,3 +51,7 @@ executable: $(OBJ_C) $(SRC_ASM)
 .PHONY: clean
 clean:
 	rm -fv $(BUILDDIR)/*.d $(BUILDDIR)/*.s $(BUILDDIR)/$(EXE)
+
+.PHONY: run
+run: all
+	$(BUILDDIR)/$(EXE)
