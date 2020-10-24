@@ -32,6 +32,8 @@ FC = gfortran
 FLAGS_VERSION = --version
 
 CFLAGS_OPT    = -Ofast -mcpu=native
+CFLAGS_SVE    = -march=armv8.4-a+sve
+CFLAGS_SVE2   = -march=armv8.4-a+sve2
 CFLAGS_NOVEC  = -fno-tree-vectorize
 CFLAGS_REPORT = -fopt-info-all-vec
 CFLAGS_OPENMP = -fopenmp
@@ -61,6 +63,8 @@ FC = armflang
 FLAGS_VERSION = --version
 
 CFLAGS_OPT    = -Ofast -mcpu=native
+CFLAGS_SVE    = -march=armv8.4-a+sve
+CFLAGS_SVE2   = -march=armv8.4-a+sve2
 CFLAGS_NOVEC  = -fno-vectorize
 CFLAGS_REPORT = -Rpass=\(loop-vectorize\) -Rpass-missed=\(loop-vectorize\)
 CFLAGS_OPENMP = -fopenmp
@@ -90,6 +94,8 @@ FC = frt
 FLAGS_VERSION = --version
 
 CFLAGS_OPT    = -Kfast
+CFLAGS_SVE    = -KSVE
+CFLAGS_SVE2   = # Not supported
 CFLAGS_NOVEC  = -KNOSVE
 CFLAGS_REPORT = 
 CFLAGS_OPENMP = -Kopenmp -Nfjomplib
@@ -204,6 +210,7 @@ endif
 endif
 endif
 #############################################################################
+
 
 print_hline = @echo "------------------------------------------------"
 print_version = $(CC) $(FLAGS_VERSION)

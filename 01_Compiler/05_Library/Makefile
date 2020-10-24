@@ -16,7 +16,7 @@
 # from, out of or in connection with the Software or the use of Software.
 #------------------------------------------------------------------------------------
 
-include ../config.mk
+include ../../config.mk
 
 MATRIX_SIZE = 1024 1024 1024
 
