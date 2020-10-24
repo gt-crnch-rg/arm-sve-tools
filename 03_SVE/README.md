@@ -39,7 +39,9 @@ floating-point arithmetic support, and basic integer arithmetic support.
 
 SVE2, the Scalable Vector Extension v2, is a superset of the Armv8-A SVE with 
 expanded functionality. The SVE2 instruction set adds thorough fixed-point 
-arithmetic support and features that benefit media processing workloads.
+arithmetic support and features that benefit media processing workloads, ML 
+workloads, and generally broaden the applicability of SVE beyond high performance
+computing applications.
 
 Because SVE2 is a superset of SVE, CPUs that implement SVE2 can run SVE binaries
 without any modifications.  However, CPUs that only implement SVE (such as the
