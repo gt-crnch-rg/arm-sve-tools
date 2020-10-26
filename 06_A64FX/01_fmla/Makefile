@@ -16,28 +16,35 @@
 # from, out of or in connection with the Software or the use of Software.
 #------------------------------------------------------------------------------------
 
-CXX = g++
-CXXFLAGS = -mcpu=a64fx
+include ../../config.mk
 
-ifndef FLAVOR
-$(error FLAVOR not defined)
-endif
-EXE = fmla_$(FLAVOR).exe
+EXE_NEON   = fmla_neon128.exe
+EXE_SVE512 = fmla_sve512.exe
+EXE_A64FX  = fmla_a64fx.exe
+EXE = $(EXE_NEON) $(EXE_SVE512) $(EXE_A64FX)
 
-EXES = fmla_neon128.exe fmla_sve512.exe fmla_a64fx.exe
 SRCS = $(wildcard *.cc)
 HDRS = $(wildcard *.h)
 OBJS = $(SRCS:.cc=.o)
+
+CXXFLAGS = $(CXXFLAGS_OPT)
 
 .PHONY: all clean run
 
 all: $(EXE)
 
 clean:
-	rm -f $(OBJS) $(EXES)
+	rm -f $(OBJS) $(EXE)
 
 run: $(EXE)
-	./$^
+	$(call print_hline)
+	./$(EXE_NEON)
+	$(call print_hline)
+	./$(EXE_SVE512)
+	$(call print_hline)
+	./$(EXE_A64FX)
+	$(call print_hline)
+
 
 run-perf: $(EXE)
 	# r8028: FP_FMA_SPEC: architecturally executed floating-point 
@@ -54,9 +61,11 @@ run-perf: $(EXE)
 	# r192:  2INST_COMMIT: cycles where two instructions are committed.
 	# r193:  3INST_COMMIT: cycles where three instructions are committed.
 	# r194:  4INST_COMMIT: cycles where four instructions are committed.
-	perf stat -e r8028,r11,r23,r24,r191,r192,r193,r194 ./$(EXE)
+	perf stat -e r8028,r11,r23,r24,r191,r192,r193,r194 ./$(EXE_NEON)
+	perf stat -e r8028,r11,r23,r24,r191,r192,r193,r194 ./$(EXE_SVE512)
+	perf stat -e r8028,r11,r23,r24,r191,r192,r193,r194 ./$(EXE_A64FX)
 
-$(EXE): fmla-$(FLAVOR).o
+fmla_%.exe: fmla-%.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 %.o: %.cc Makefile $(HDRS)
