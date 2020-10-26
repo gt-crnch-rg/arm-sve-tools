@@ -151,8 +151,8 @@ int main(int argc, char** argv)
 
     // Perform the matrix-matrix multiplication with a bit of blocking and
     // loop unrolling
-    printf("Performing multiply\n");
-    openmp_multiply(matA, matB, matC, n, m, l, blockSize);
+    //printf("Performing multiply\n");
+    //openmp_multiply(matA, matB, matC, n, m, l, blockSize);
 
     // Perform the matrix-matrix multiplication with the library
     t1= timer_clock::now();

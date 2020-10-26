@@ -1,8 +1,14 @@
-# Compiler Comparison with Blocked Matrix Multiplication
+# Compiler Comparison with Transposed Matrix Multiplication
 
 For this example we improve on the native matrix multiplication code
-by implementing a simple cache blocking scheme.  The block size is
-passed on the command line. To compile the code, simply type:
+by implementing two common optimizations:
+ * A simple cache blocking scheme.  The block size is passed on the 
+   command line after the matrix dimensions.
+ * Storing the $`B`$ matrix transposed.  This improves the data access
+   pattern by iterating over the unit-stride dimension in both $`A`$ 
+   and $`B`$ in the innermost loop of the matrix mulitplication kernel. 
+  
+To compile the code, simply type:
 
 > `make`
 

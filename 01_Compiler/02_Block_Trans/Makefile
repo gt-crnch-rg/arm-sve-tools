@@ -23,11 +23,11 @@ MATRIX_SIZE = 1024 1024 1024
 BLOCK_SIZE = 128
 
 
-SRC = mm_trans.cpp
+SRC = mm_blk_trans.cpp
 
-EXE_DEF       = mm_trans_$(COMPILER)_def.exe
-EXE_OPT       = mm_trans_$(COMPILER)_opt.exe
-EXE_OPT_NOVEC = mm_trans_$(COMPILER)_opt_novec.exe
+EXE_DEF       = mm_blk_trans_$(COMPILER)_def.exe
+EXE_OPT       = mm_blk_trans_$(COMPILER)_opt.exe
+EXE_OPT_NOVEC = mm_blk_trans_$(COMPILER)_opt_novec.exe
 
 EXE = $(EXE_DEF) $(EXE_OPT) $(EXE_OPT_NOVEC)
 
