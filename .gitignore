@@ -6,3 +6,4 @@
 *.exe
 *.d
 *.log
+perf.data*
