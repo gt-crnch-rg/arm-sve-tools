@@ -4,9 +4,11 @@ The STREAM benchmark is a defacto standard for measuring memory bandwidth.
 The benchmark includes four kernels: COPY, SCALE, ADD, and TRIAD. The kernels
 are executed in sequence in a loop.  Two parameters configure STREAM:
  * `STREAM_ARRAY_SIZE`: The number of double-precision elements in each array.
-   It is critical to select a sufficiently large STREAM_ARRAY_SIZE when measuring 
+   It is critical to select a sufficiently large array size when measuring 
    bandwidth to/from main memory.
  * `NTIMES`: The number of iterations of the test loop.
+
+See *STREAM_README* in this directory for more details on STREAM.
 
 This example is structured to demonstrate the performance benefits of OpenMP,
 effective use of NUMA, and features of the Arm architecture.  It uses a version of
@@ -51,12 +53,25 @@ cache lines and/or very little available L3 cache.  The Fujitsu A64FX has no L3,
 each L2 cache is 256 bytes, so a "useless" load of the destination array from main 
 memory has a much higher penalty on A64FX.
 
-## 05_stream_zfill_acle
+## 05_stream_fujitsu
+
+The Fujitsu compiler for A64FX can automatically generate the `DC ZVA` zfill
+instructions.  It also uses a more highly-tuned memory management environment and
+OpenMP runtime that can take advantage of the A64FX's hardware barrier. This
+version of STREAM should achieve the best bandwidth and will do it without inline
+assembly, but it does require the Fujitsu compiler.
+
+## 06_stream_zfill_acle
 
 Further optimization of the 04_stream_zfill vesion that uses SVE intrinsics via the 
 Arm C Language Extensions (ACLE).  The memory bandwidth performance of this version 
 does not improve, but the number of front-end bound cyles is reduced due to more 
 effective vectorization of the inner loop.  Since STREAM is backend-bound on main
 memory, there is no gain.
+
+## 99_stream
+
+An omnibus edition of STREAM for porting, profiling, and tuning on new platforms.
+Examples 1-6 were derived from this code.
 
 
