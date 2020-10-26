@@ -216,12 +216,15 @@ endif
 # ArmIE Configuration
 #############################################################################
 
-ARMIE = armie
-ARMIE_FLAGS = -msve-vector-bits=512 -- 
+ARMIE_EXE = armie
+ARMIE_SVE_VECTOR_BITS ?= 512
+ARMIE = $(ARMIE_EXE) -msve-vector-bits=$(ARMIE_SVE_VECTOR_BITS)
+ARMIE_MEMTRACE = $(ARMIE_EXE) -e libmemtrace_sve_$(ARMIE_SVE_VECTOR_BITS).so
 
 #############################################################################
 # Functions
 #############################################################################
+
 
 print_hline = @echo "------------------------------------------------"
 print_version = $(CC) $(FLAGS_VERSION)

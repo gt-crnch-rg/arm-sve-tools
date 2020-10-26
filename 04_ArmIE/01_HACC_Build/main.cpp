@@ -66,7 +66,7 @@
 // This number of iterations, which can be changed via the command line, is set
 // so that the benchmark will run for a few seconds per polynomial degree of
 // the force kernel on a single core of a modern CPU.
-int NumIters = 2000;
+int NumIters = 500;
 
 // The interaction lists range is size between a few hundred and a few thousand.
 int IListMin = 250;
@@ -184,9 +184,9 @@ int main(int argc, char *argv[]) {
     NumIters = atoi(argv[1]);
   std::cout << "Iterations: " << NumIters << "\n";
 
-  run(GravityForceKernel4, "4th Order");
+  //run(GravityForceKernel4, "4th Order");
   run(GravityForceKernel5, "5th Order");
-  run(GravityForceKernel6, "6th Order");
+  //run(GravityForceKernel6, "6th Order");
 
   return 0;
 }

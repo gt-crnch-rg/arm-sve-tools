@@ -18,40 +18,36 @@
 
 include ../../config.mk
 
-EXE = vecdot_f16
+ITERATIONS = 20
 
-SRCDIR = ./src
-BUILDDIR = ./build
+SRC = GravityForceKernel.cpp main.cpp
 
-CFLAGS = $(CFLAGS_OPT) $(CFLAGS_SVE2)
+EXE_OPT       = hacc_$(COMPILER)_opt.exe
 
-SRC_C := $(wildcard $(SRCDIR)/*.c)
-SRC_ASM := $(wildcard $(SRCDIR)/*.S)
+EXE = $(EXE_OPT)
 
-OBJ_C := $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.s, $(SRC_C))
+LLVM_MC = $(abspath $(dir $(shell which armclang))/../llvm-bin/llvm-mc)
+export LLVM_MC
 
-.PHONY: all
-all: build_directory executable
 
-DEPS := $(OBJ_C:%.s=%.d)
+.PHONY: all clean run
 
--include $(DEPS)
+all: $(EXE)
 
-$(BUILDDIR)/%.s: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) $< -S -o $@
-
-.PHONY: build_directory
-build_directory:
-	@mkdir -pv $(BUILDDIR)
-
-.PHONY: executable
-executable: $(OBJ_C) $(SRC_ASM)
-	$(CC) $(CFLAGS) $^ -o $(BUILDDIR)/$(EXE)
-
-.PHONY: clean
 clean:
-	rm -fv $(BUILDDIR)/*.d $(BUILDDIR)/*.s $(BUILDDIR)/$(EXE)
+	rm -f *.o *.exe *.opt.yaml
+	rm -f undecoded.*.*.log
 
-.PHONY: run
-run: all
-	$(ARMIE) -- $(BUILDDIR)/$(EXE)
+run: $(EXE)
+	$(call print_hline)
+	rm -f undecoded.*.*.log
+	$(ARMIE) -i libopcodes_emulated.so -- ./$(EXE_OPT) $(ITERATIONS)
+	awk '{print $$3}' undecoded.*.*.log | enc2instr.py -mattr=+sve | awk -F: '{print $$2}' | paste undecoded.*.*.log /dev/stdin
+	$(call print_hline)
+
+$(EXE_OPT): $(SRC)
+	$(call print_hline)
+	$(call print_version)
+	$(CXX) $(CXXFLAGS_REPORT) $(CXXFLAGS_OPT) -o $@ $^
+	$(call print_hline)
+

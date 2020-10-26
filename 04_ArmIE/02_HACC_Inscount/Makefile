@@ -18,40 +18,30 @@
 
 include ../../config.mk
 
-EXE = vecdot_f16
+ITERATIONS = 100
 
-SRCDIR = ./src
-BUILDDIR = ./build
+SRC = GravityForceKernel.cpp main.cpp
 
-CFLAGS = $(CFLAGS_OPT) $(CFLAGS_SVE2)
+EXE_OPT       = hacc_$(COMPILER)_opt.exe
 
-SRC_C := $(wildcard $(SRCDIR)/*.c)
-SRC_ASM := $(wildcard $(SRCDIR)/*.S)
+EXE = $(EXE_OPT)
 
-OBJ_C := $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.s, $(SRC_C))
 
-.PHONY: all
-all: build_directory executable
+.PHONY: all clean run
 
-DEPS := $(OBJ_C:%.s=%.d)
+all: $(EXE)
 
--include $(DEPS)
-
-$(BUILDDIR)/%.s: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) $< -S -o $@
-
-.PHONY: build_directory
-build_directory:
-	@mkdir -pv $(BUILDDIR)
-
-.PHONY: executable
-executable: $(OBJ_C) $(SRC_ASM)
-	$(CC) $(CFLAGS) $^ -o $(BUILDDIR)/$(EXE)
-
-.PHONY: clean
 clean:
-	rm -fv $(BUILDDIR)/*.d $(BUILDDIR)/*.s $(BUILDDIR)/$(EXE)
+	rm -f *.o *.exe *.opt.yaml
 
-.PHONY: run
-run: all
-	$(ARMIE) -- $(BUILDDIR)/$(EXE)
+run: $(EXE)
+	$(call print_hline)
+	$(ARMIE) -i libinscount_emulated.so -- ./$(EXE_OPT) $(ITERATIONS)
+	$(call print_hline)
+
+$(EXE_OPT): $(SRC)
+	$(call print_hline)
+	$(call print_version)
+	$(CXX) $(CXXFLAGS_REPORT) $(CXXFLAGS_OPT) -o $@ $^
+	$(call print_hline)
+

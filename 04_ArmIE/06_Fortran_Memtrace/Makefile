@@ -18,40 +18,39 @@
 
 include ../../config.mk
 
-EXE = vecdot_f16
+FSRC = $(wildcard *.f90) 
+CSRC = profiler_c.c timer_c.c
+SRC  = $(FSRC) $(CSRC)
 
-SRCDIR = ./src
-BUILDDIR = ./build
+OBJ = $(FSRC:.f90=.o) $(CSRC:.c=.o)
 
-CFLAGS = $(CFLAGS_OPT) $(CFLAGS_SVE2)
+EXE = accelerate_sve.exe
 
-SRC_C := $(wildcard $(SRCDIR)/*.c)
-SRC_ASM := $(wildcard $(SRCDIR)/*.S)
+FFLAGS = -g $(FFLAGS_REPORT) $(FFLAGS_OPT)
+CFLAGS = -g $(CFLAGS_REPORT) $(CFLAGS_OPT)
 
-OBJ_C := $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.s, $(SRC_C))
 
-.PHONY: all
-all: build_directory executable
+.PHONY: all clean run
 
-DEPS := $(OBJ_C:%.s=%.d)
+all: $(EXE)
 
--include $(DEPS)
-
-$(BUILDDIR)/%.s: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) $< -S -o $@
-
-.PHONY: build_directory
-build_directory:
-	@mkdir -pv $(BUILDDIR)
-
-.PHONY: executable
-executable: $(OBJ_C) $(SRC_ASM)
-	$(CC) $(CFLAGS) $^ -o $(BUILDDIR)/$(EXE)
-
-.PHONY: clean
 clean:
-	rm -fv $(BUILDDIR)/*.d $(BUILDDIR)/*.s $(BUILDDIR)/$(EXE)
+	rm -f *.o *.exe *.opt.yaml *.mod *.log
 
-.PHONY: run
-run: all
-	$(ARMIE) -- $(BUILDDIR)/$(EXE)
+run: $(EXE)
+	$(call print_hline)
+	$(ARMIE_EXE) -e libmemtrace_sve_$(ARMIE_SVE_VECTOR_BITS).so -i libmemtrace_simple.so -- ./accelerate_sve -nx 500 -ny 500 -its 10
+	$(call print_hline)
+
+$(EXE): $(OBJ)
+	$(call print_hline)
+	$(call print_version)
+	$(FC) -o $(EXE) $(FFLAGS) $(OBJ)
+	$(call print_hline)
+
+%.o: %.c
+	$(CC) -o $@ -c $(CFLAGS) $<
+
+%.o: %.f90
+	$(FC) -o $@ -c $(FFLAGS) $<
+
