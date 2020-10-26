@@ -8,10 +8,14 @@ so the exact number of giga operations (GOP) is known.  Performance in gigaflops
 Three versions are included:
  * `fmla-neon128.cc`: Loop over 16 NEON FMLA instructions, unrolled four times.
  * `fmla-sve512.cc`: Loop over 16 SVE FMLA instructions, unrolled four times.
- * `fmla-a64fx.cc`: Loop over 20 SVE FMLA instructions, unrolled three times.
+ * `fmla-a64fx.cc`: An optimized version for the Fujitsu A64FX.  
+   Loop over 20 SVE FMLA instructions, unrolled three times.
 
 Running the three different versions will demonstrate the performance impact of
-different vector instructions and instruction latencies.
+different vector instructions and instruction latencies.  For instance, the long
+latency of the FMLA instruction on the Fujitsu A64FX requres a larger inner-loop 
+body.  The "bubble" at the end of the A64FX pipe is easily visualized by
+`vimdiff fmla-sve512.cc fmla-a64fx.cc`.
 
 Theoretical double precision peak performance in gigaflops of any system can 
 be calculated as:
