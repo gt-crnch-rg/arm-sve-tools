@@ -16,38 +16,36 @@
 # from, out of or in connection with the Software or the use of Software.
 #------------------------------------------------------------------------------------
 
+include ../../../config.mk
+
+
+# Total memory: 24GiB
+STREAM_ARRAY_SIZE = 1073741824
 NTIMES = 20
 
-# Total memory: 24GB 
-STREAM_ARRAY_SIZE = 1073741824
-# Total memory: 6GB
-#STREAM_ARRAY_SIZE = 268435440
-# A convinent stream size: (48[cores] * 32[elem per cache line] * 400000)
-#STREAM_ARRAY_SIZE = 614400000
-
+# Runtime parameters
 OMP_ENV = OMP_NUM_THREADS=48 OMP_PROC_BIND=close
-#NUMACTL = numactl -C 0-47 -l
+NUMACTL = numactl -C 0-47 -l
 RUN = $(OMP_ENV) $(NUMACTL)
 
-CC = gcc
-CFLAGS = -Ofast -mcpu=a64fx -fopenmp -DSTREAM_ARRAY_SIZE=$(STREAM_ARRAY_SIZE)UL -DNTIMES=$(NTIMES)
 
-FLAVOR = zfill-acle
-EXE = stream_$(FLAVOR).exe
+CFLAGS = $(CFLAGS_OPT) $(CFLAGS_OPENMP) -DSTREAM_ARRAY_SIZE=$(STREAM_ARRAY_SIZE) -DNTIMES=$(NTIMES)
 
-SRCS = $(wildcard *.c)
-HDRS = $(wildcard *.h)
-OBJS = $(SRCS:.c=.o)
+SRC = $(wildcard *.c)
+HDR = $(wildcard *.h)
+OBJ = $(SRC:.c=.o)
+
+EXE = stream_openmp_$(COMPILER).exe
 
 .PHONY: all clean run
 
 all: $(EXE)
 
 clean:
-	rm -f $(OBJS) $(EXE)
+	rm -f *.o *.exe *.opt.yaml
 
 run: $(EXE)
-	$(RUN) ./$^
+	$(RUN) ./$(EXE)
 
 run-perf: $(EXE)
 	# r11:   CPU_CYCLES: This event counts every cycle
@@ -67,9 +65,12 @@ run-perf: $(EXE)
 	# r194:  4INST_COMMIT: cycles where four instructions are committed.
 	$(RUN) perf stat -e r11,r23,r24,r184,r191,r192,r193,r194 ./$(EXE)
 
-$(EXE): stream.o kernel-$(FLAVOR).o
+$(EXE): $(OBJ)
+	$(call print_hline)
+	$(call print_version)
 	$(CC) $(CFLAGS) -o $@ $^
+	$(call print_hline)
 
-%.o: %.c Makefile $(HDRS)
-	$(CC) -c $(CFLAGS) -o $@ $<
+%.o: %.c $(HDR) Makefile
+	$(CC) -c $< $(CFLAGS)
 

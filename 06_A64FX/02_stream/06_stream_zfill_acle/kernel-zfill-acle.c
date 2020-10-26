@@ -68,7 +68,7 @@ void stream_allocate(stream_t ** a, stream_t ** b, stream_t ** c)
 {
   if (STREAM_ARRAY_SIZE % ELEM_PER_CACHE_LINE) {
     fprintf(stderr, "STREAM_ARRAY_SIZE=%zd is not a multiple of ELEM_PER_CACHE_LINE=%zd\n",
-        STREAM_ARRAY_SIZE, ELEM_PER_CACHE_LINE);
+        (size_t)STREAM_ARRAY_SIZE, (size_t)ELEM_PER_CACHE_LINE);
     exit(EXIT_FAILURE);
   }
   size_t const size = sizeof(STREAM_TYPE) * (STREAM_ARRAY_SIZE + OFFSET);

@@ -40,3 +40,21 @@ Type `make` to compile.  `make run` will run all three versions of the example.
 `make run-perf` will run all three examples with some pre-selected performance
 counters that are useful on the Fujitsu A64FX.
 
+Example output from a Fujitsu A64FX:
+
+```
+------------------------------------------------
+./fmla_neon128.exe
+256000000 Flops in 0.0194543 seconds
+13.1591 GFlops
+------------------------------------------------
+./fmla_sve512.exe
+1024000000 Flops in 0.0194653 seconds
+52.6063 GFlops
+------------------------------------------------
+./fmla_a64fx.exe
+960000000 Flops in 0.0150295 seconds
+63.8742 GFlops
+------------------------------------------------
+```
+
