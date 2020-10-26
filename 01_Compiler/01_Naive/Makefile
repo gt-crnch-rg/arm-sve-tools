@@ -19,7 +19,7 @@
 include ../../config.mk
 
 # Input parameters for `make run`
-MATRIX_SIZE = 1024 1024 1024
+MATRIX_SIZE = 256 256 256
 
 
 SRC = mm.cpp
