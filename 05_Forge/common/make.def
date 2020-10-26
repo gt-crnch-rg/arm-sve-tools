@@ -1,5 +1,0 @@
-CC=mpicc
-CXXC=mpicpc
-FC=mpifort
-COMPILER=arm
-
