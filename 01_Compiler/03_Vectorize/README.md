@@ -8,8 +8,7 @@ the code, simply type:
 
 > `make`
 
-By default, this will use the GNU c++ compiler (g++) to build three versions
-of the executable:
+This will build three versions of the executable:
  * *_def.exe: Compilation without any optimizing compiler flags.
  * *_opt.exe: Compilation with a high level of optimization.
  * *_novec.exe: Compilation with a high level of optimization, but with automatic vectorization disabled.
