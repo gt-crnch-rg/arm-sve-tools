@@ -32,21 +32,25 @@ FC = gfortran
 FLAGS_VERSION = --version
 
 CFLAGS_OPT    = -Ofast -mcpu=native
-CFLAGS_SVE    = -march=armv8.4-a+sve
-CFLAGS_SVE2   = -march=armv8.4-a+sve2
 CFLAGS_NOVEC  = -fno-tree-vectorize
 CFLAGS_REPORT = -fopt-info-all-vec
 CFLAGS_OPENMP = -fopenmp
+CFLAGS_NEON   = -march=armv8.2-a+simd+nosve
+CFLAGS_SVE2   = -march=armv8.4-a+sve2
 
 CXXFLAGS_OPT    = $(CFLAGS_OPT)
 CXXFLAGS_NOVEC  = $(CFLAGS_NOVEC)
 CXXFLAGS_REPORT = $(CFLAGS_REPORT)
 CXXFLAGS_OPENMP = $(CFLAGS_OPENMP)
+CXXFLAGS_NEON   = $(CFLAGS_NEON)
+CXXFLAGS_SVE2   = $(CFLAGS_NEON)
 
 FFLAGS_OPT    = $(CFLAGS_OPT)
 FFLAGS_NOVEC  = $(CFLAGS_NOVEC)
 FFLAGS_REPORT = $(CFLAGS_REPORT)
 FFLAGS_OPENMP = $(CFLAGS_OPENMP)
+FFLAGS_NEON   = $(CFLAGS_NEON)
+FFLAGS_SVE2   = $(CFLAGS_NEON)
 
 else
 #############################################################################
@@ -63,21 +67,25 @@ FC = armflang
 FLAGS_VERSION = --version
 
 CFLAGS_OPT    = -Ofast -mcpu=native
-CFLAGS_SVE    = -march=armv8.4-a+sve
-CFLAGS_SVE2   = -march=armv8.4-a+sve2
 CFLAGS_NOVEC  = -fno-vectorize
 CFLAGS_REPORT = -Rpass=\(loop-vectorize\) -Rpass-missed=\(loop-vectorize\)
 CFLAGS_OPENMP = -fopenmp
+CFLAGS_NEON   = -march=armv8.2-a+simd+nosve
+CFLAGS_SVE2   = -march=armv8.4-a+sve2
 
 CXXFLAGS_OPT    = $(CFLAGS_OPT)
 CXXFLAGS_NOVEC  = $(CFLAGS_NOVEC)
 CXXFLAGS_REPORT = $(CFLAGS_REPORT)
 CXXFLAGS_OPENMP = $(CFLAGS_OPENMP)
+CXXFLAGS_NEON   = $(CFLAGS_NEON)
+CXXFLAGS_SVE2   = $(CFLAGS_NEON)
 
 FFLAGS_OPT    = $(CFLAGS_OPT)
 FFLAGS_NOVEC  = $(CFLAGS_NOVEC)
 FFLAGS_REPORT = $(CFLAGS_REPORT)
 FFLAGS_OPENMP = $(CFLAGS_OPENMP)
+FFLAGS_NEON   = $(CFLAGS_NEON)
+FFLAGS_SVE2   = $(CFLAGS_NEON)
 
 else
 #############################################################################
@@ -94,21 +102,25 @@ FC = frt
 FLAGS_VERSION = --version
 
 CFLAGS_OPT    = -Kfast
-CFLAGS_SVE    = -KSVE
-CFLAGS_SVE2   = # Not supported
 CFLAGS_NOVEC  = -KNOSVE
 CFLAGS_REPORT = 
 CFLAGS_OPENMP = -Kopenmp -Nfjomplib
+CFLAGS_NEON   = # Not supported
+CFLAGS_SVE2   = # Not supported
 
 CXXFLAGS_OPT    = $(CFLAGS_OPT)
 CXXFLAGS_NOVEC  = $(CFLAGS_NOVEC)
 CXXFLAGS_REPORT = $(CFLAGS_REPORT)
 CXXFLAGS_OPENMP = $(CFLAGS_OPENMP)
+CXXFLAGS_NEON   = $(CFLAGS_NEON)
+CXXFLAGS_SVE2   = $(CFLAGS_NEON)
 
 FFLAGS_OPT    = $(CFLAGS_OPT)
 FFLAGS_NOVEC  = $(CFLAGS_NOVEC)
 FFLAGS_REPORT = $(CFLAGS_REPORT)
 FFLAGS_OPENMP = $(CFLAGS_OPENMP)
+FFLAGS_NEON   = $(CFLAGS_NEON)
+FFLAGS_SVE2   = $(CFLAGS_NEON)
 
 else
 #############################################################################
