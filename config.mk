@@ -128,11 +128,35 @@ else
 #############################################################################
 ifeq (cray,$(COMPILER))
 
+LIBRARY ?= cblas
+
 CC = cc
 CXX = CC
 fc = ftn
 
-VERSION_FLAG = --version
+FLAGS_VERSION = --version
+
+CFLAGS_OPT    = -O3 
+CFLAGS_NOVEC  = -hvector0
+CFLAGS_REPORT = -hlist=a
+CFLAGS_OPENMP = -homp
+CFLAGS_NEON   = 
+CFLAGS_SVE2   = 
+
+CXXFLAGS_OPT    = $(CFLAGS_OPT)
+CXXFLAGS_NOVEC  = $(CFLAGS_NOVEC)
+CXXFLAGS_REPORT = $(CFLAGS_REPORT)
+CXXFLAGS_OPENMP = $(CFLAGS_OPENMP)
+CXXFLAGS_NEON   = $(CFLAGS_NEON)
+CXXFLAGS_SVE2   = $(CFLAGS_NEON)
+
+FFLAGS_OPT    = $(CFLAGS_OPT)
+FFLAGS_NOVEC  = $(CFLAGS_NOVEC)
+FFLAGS_REPORT = $(CFLAGS_REPORT)
+FFLAGS_OPENMP = $(CFLAGS_OPENMP)
+FFLAGS_NEON   = $(CFLAGS_NEON)
+FFLAGS_SVE2   = $(CFLAGS_NEON)
+
 
 else
 #############################################################################
