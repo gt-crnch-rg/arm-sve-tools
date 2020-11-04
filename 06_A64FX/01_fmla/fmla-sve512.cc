@@ -95,12 +95,11 @@ int main(int argc, char ** argv)
     const uint64_t unroll = 4; // match kernel asm
     const uint64_t kernel_flops = lanes * flops * unroll * iters;
 
-    auto start = chrono::high_resolution_clock::now();
+    auto start = chrono::steady_clock::now();
     kernel(iters);
-    auto end = chrono::high_resolution_clock::now();
-    chrono::duration<double> diff = end - start;
-    double seconds = diff.count();
-
+    auto end = chrono::steady_clock::now();
+    double seconds=chrono::duration_cast<chrono::microseconds>(end-start).count();
+    seconds = seconds * 1e-6;
     double gflops = kernel_flops / (seconds * 1e9);
 
     cout << kernel_flops << " Flops in " << seconds << " seconds" << endl;
