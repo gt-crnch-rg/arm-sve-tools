@@ -19,3 +19,26 @@ Run ACLE
 NPB: 
 Run EP.C with and w/o ArmPL
  => With: 
+
+
+Schedule
+ => Cluster first touch and A64FX into come first
+
+
+Breakout rooms
+ => Just hacking
+ => Need help logging in
+
+
+Isambard:
+qsub -I
+drop caches in preamble
+
+
+XSilo: FD, PR, SVdr birthday
+
+
+
+Fugaku access
+ => Talk to Kujira, CC Fabrice
+
