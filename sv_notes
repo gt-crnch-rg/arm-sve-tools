@@ -4,4 +4,56 @@ Nov. 01, 2020:
 2)noticable latency
 3)on login (which is an a64fx) what is best run command / submission
 
+upon login landing:
+Currently Loaded Modulefiles:
+ 1) cpe-cray                  3) craype/2.7.0(default)   5) craype-network-infiniband
+ 2) cce-sve/10.0.1(default)   4) craype-arm-nsp1         6) cray-libsci/20.09.1.1(default)
+[ri-svadlamani@gw4a64fxlogin00 01_Naive]$ gcc --version
+gcc (GCC) 8.3.1 20191121 (Red Hat 8.3.1-5)
+Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+[ri-svadlamani@gw4a64fxlogin00 01_Naive]$ cc --version
+Cray cc : Version 10.0.1
+===================
+module av:
+[ri-svadlamani@gw4a64fxlogin00 01_Naive]$ module av
+-------------------------------------------------- /opt/cray/pe/craype/2.7.0/modulefiles ---------------------------------------------------
+craype-arm-nsp1  craype-network-infiniband
+
+------------------------------------------------- /opt/cray/pe/craype/default/modulefiles --------------------------------------------------
+craype-arm-nsp1  craype-network-infiniband
+
+--------------------------------------------- /opt/cray/pe/craype-targets/default/modulefiles ----------------------------------------------
+craype-arm-nsp1  craype-arm-thunderx2  craype-network-infiniband
+
+--------------------------------------------------------- /opt/cray/pe/modulefiles ---------------------------------------------------------
+atp/3.8.1(default)                    cray-libsci/20.10.1.2                                   cray-stat/4.7.1(default)
+cce-sve/10.0.1(default)               cray-mvapich2_nogpu/2.3.4(default)                      craype/2.7.0(default)
+cce/10.0.3(default)                   cray-mvapich2_nogpu_noregcache/2.3.4(default)           craypkg-gen/1.3.11(default)
+cray-ccdb/4.8.1(default)              cray-mvapich2_nogpu_noregcache_svealpha/2.3.4(default)  gdb4hpc/4.8.1(default)
+cray-cti/2.8.1(default)               cray-mvapich2_nogpu_svealpha/2.3.4(default)             papi/6.0.0.4(default)
+cray-fftw/3.3.8.8(default)            cray-mvapich2_noslurm_nogpu/2.3.4(default)              perftools-base/20.10.0(default)
+cray-hdf5-parallel/1.12.0.2(default)  cray-netcdf-hdf5parallel/4.7.4.0(default)               PrgEnv-cray/7.0.0
+cray-hdf5/1.12.0.2(default)           cray-netcdf/4.7.4.0(default)                            valgrind4hpc/2.8.1(default)
+cray-libsci/20.09.1.1(default)        cray-parallel-netcdf/1.12.1.0(default)
+
+------------------------------------------------------------- /opt/modulefiles -------------------------------------------------------------
+gcc/8.1.0(default)
+
+------------------------------------------------------ /opt/cray/pe/cpe-prgenv/7.0.0 -------------------------------------------------------
+cpe-cray
+
+===================
+4)ERROR:
+[ri-svadlamani@gw4a64fxlogin00 01_Naive]$ make COMPILER=cray
+../../config.mk:218: *** Invalid parameter: LIBRARY=.  Stop.
+======
+cray compiler:
+ Vectorization
+●  -hvectorN (cc/CC) where N=0...3, specify the level of automatic vectorizing to be performed. Vectorization results in significant performance improvements with a small increase in object code size. Vectorization directives are unaffected by this option
+●  0: No automatic vectorization
+●  1: Specifies conservative vectorization. Loop nests are restructured. No vectorizations that might create false exceptions are performed. Results may differ slightly from results obtained when N=0 is specified because of vector reductions
+●  2: (Default) Specifies moderate vectorization. Characteristics include moderate compile time and size. Loop nests are restructured
+●  3: Specifies aggressive vectorization. Loop nests are restructured. Vectorizations that might create false exceptions in rare cases may be performed.
