@@ -7,7 +7,7 @@ These are examples of simple HPC applications that can take advantage of SVE.
 The [HACCKernels benchmark](https://xgitlab.cels.anl.gov/hacc/HACCKernels) represents 
 the computationally intensive part of an N-body cosmology code.  Application performance
 is dominated by a long chain of floating point instructions in the innermost loop.
-Application performace scales well with vector length since increasing vector width
+Application performance scales well with vector length since increasing vector width
 increases the number of innermost loop iterations that can be completed simultaneously.
 
 The figure of merit is wall clock time spent in the application loop.  It is reported
