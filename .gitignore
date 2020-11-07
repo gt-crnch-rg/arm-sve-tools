@@ -8,3 +8,4 @@
 *.log
 perf.data*
 build/
+*.lst
