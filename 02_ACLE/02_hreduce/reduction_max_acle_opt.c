@@ -21,7 +21,7 @@
 #include <arm_sve.h>
 
 // the code below assumes 32 elements for simplicity
-const uint32_t SIZE = 32;
+#define SIZE 32
 
 uint64_t max(uint64_t array[SIZE])
 {

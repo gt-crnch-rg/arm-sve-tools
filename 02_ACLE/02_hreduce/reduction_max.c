@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-const uint64_t SIZE = 32;
+#define SIZE 32
 
 uint64_t max(uint64_t array[SIZE])
 {

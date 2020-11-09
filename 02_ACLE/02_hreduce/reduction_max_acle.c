@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <arm_sve.h>
 
-const uint32_t SIZE = 16;
+#define SIZE 32
 
 uint32_t max_scalar(uint32_t array[SIZE])
 {
