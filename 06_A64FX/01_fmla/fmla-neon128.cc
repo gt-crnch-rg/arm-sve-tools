@@ -16,6 +16,10 @@
 // from, out of or in connection with the Software or the use of Software.
 //------------------------------------------------------------------------------------
 
+#ifdef _CRAYC
+#error Example does not support cray compiler
+#endif
+
 #include <iostream>
 #include <cstdint>
 #include <chrono>
