@@ -51,5 +51,5 @@ $(EXE_NEON): $(SRC)
 $(EXE_SVE): $(SRC)
 	$(call print_hline)
 	$(call print_version)
-	$(CXX) $(CXXFLAGS_REPORT) $(CXXFLAGS_OPT) $(CXXFLAGS_SVE) $(CXXFLAGS_OPENMP) -o $@ $^
+	$(CXX) $(CXXFLAGS_REPORT) $(CXXFLAGS_OPT) $(CXXFLAGS_OPENMP) -o $@ $^
 	$(call print_hline)
