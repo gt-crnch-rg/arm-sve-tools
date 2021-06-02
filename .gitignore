@@ -10,6 +10,3 @@ perf.data*
 build/
 *.lst
 *.dis
-*.ppt
-*.pptx
-*.pdf
