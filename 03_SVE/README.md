@@ -6,8 +6,9 @@ A corresponding C reference code is provided for functional correctness.
 
 These examples were copied from developer.arm.com[^1] and updated to 
 separate SVE from SVE2 and better support native compilation on CPUs that 
-implement SVE or SVE2. The accompanying whitepaper 
-*SVE-SVE2-programming-examples-REL-01.pdf* describes each example in detail
+implement SVE or SVE2. The whitepaper 
+[SVE-SVE2-programming-examples-REL-01.pdf](https://developer.arm.com/documentation/dai0548/b) 
+describes each example in detail
 and walks through the SVE features each example highlights.  You are
 encouraged to read through this document while working with these examples.
 
