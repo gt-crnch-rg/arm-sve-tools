@@ -30,11 +30,10 @@ The PMU values must be scaled to calculate power consumption in Watts.  The scal
 ## Example output
 
 Use `make run-perf` to run the example.  This builds two versions of the HACC GravityForce kernel.
-One version uses NEON vectorization, while the other uses SVE.  You should see better power efficiency
-in the SVE version due to increased vector utilization.
+One version uses NEON vectorization, while the other uses SVE.
 
 ```
-[johlin02@pacu11 03_energy]$ make run-perf
+[johlin02@pacu13 03_energy]$ make run-perf
 # r11:   CPU_CYCLES: This event counts every cycle
 # r1e0:  EA_CORE: This event counts energy consumption per cycle of core.
 # r3e0:  EA_L2: This event counts energy consumption per cycle of L2 cache.
@@ -42,21 +41,21 @@ in the SVE version due to increased vector utilization.
 # r3e8:  EA_MEMORY: This event counts energy consumption per cycle of CMG local memory.
 #        It counts all events caused in measured CMG regardless of measured PE.
 perf stat -x\; -o neon.perf -e duration_time,r11,r1e0,r3e0,r3e8 ./hacc_arm_neon.exe 1000
-Maximum OpenMP Threads: 1
+Maximum OpenMP Threads: 48
 Iterations: 1000
-Gravity Short-Range-Force Kernel (5th Order): 12823.6 -444.108 -645.349: 0.980599 s
+Gravity Short-Range-Force Kernel (5th Order): 12823.6 -444.108 -645.349: 1.51121 s
 perf stat -x\; -o sve.perf -e duration_time,r11,r1e0,r3e0,r3e8 ./hacc_arm_sve.exe 1000
-Maximum OpenMP Threads: 1
+Maximum OpenMP Threads: 48
 Iterations: 1000
-Gravity Short-Range-Force Kernel (5th Order): 12823.6 -444.108 -645.349: 0.490197 s
+Gravity Short-Range-Force Kernel (5th Order): 12823.6 -444.108 -645.349: 1.45336 s
 ./postproc_perf_energy.py neon.perf -c 8.04 -l 32.8 -m 271
-Core freq: 1.99984 GHz
-Per-core power: 1.99971 Watt
-Per-CMG L2 power: 1.92343 Watt
-Per-CMG HBM power: 1.85279 Watt
+Core freq: 1.99784 GHz
+Per-core power: 2.1054 Watt
+Per-CMG L2 power: 1.93873 Watt
+Per-CMG HBM power: 1.85643 Watt
 ./postproc_perf_energy.py sve.perf -c 8.04 -l 32.8 -m 271
-Core freq: 1.99974 GHz
-Per-core power: 1.77814 Watt
-Per-CMG L2 power: 1.92331 Watt
-Per-CMG HBM power: 1.85303 Watt
+Core freq: 1.99829 GHz
+Per-core power: 2.12486 Watt
+Per-CMG L2 power: 1.94959 Watt
+Per-CMG HBM power: 1.85812 Watt
 ```
