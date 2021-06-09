@@ -36,78 +36,110 @@
 #include <cmath>
 #include <omp.h>
 
-const size_t GATHERVL = 16;
-const size_t N = 84*GATHERVL; // must be multiple of GATHERVL and 3*N*8 fit into L1
-const size_t NREPEAT = 100000;
-const size_t MAXTHREAD = 36;
-const size_t THREADSTRIDE = 4;
-
 #define ALIGNAS alignas(256)
 
+static size_t const GATHERVL = 16;
+static size_t const N = 84*GATHERVL; // must be multiple of GATHERVL and 3*N*8 fit into L1
+static size_t const NREPEAT = 10000;
+
+// Thread count of 0 means single thread without OpenMP pragmas
+static std::vector<size_t> const THREAD_COUNTS = {
+  0, 1, 4, 8, 12, 24, 36, 48
+};
+
 // These are copied into a thread's stack before use
-std::vector<size_t> globalmap(N);
-std::vector<size_t> shortmap(N);
+static std::vector<size_t> globalmap(N);
+static std::vector<size_t> shortmap(N);
 
-void Xsimple(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) {
-  for (size_t i=0; i<n; i++) y[i] = 2.0*x[i] + 3.0*x[i]*x[i];
-}
 
-void Xpredicate(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) {
-  for (size_t i=0; i<n; i++) if (x[i]>0) y[i] = x[i];
-}
-
-void Xrecip(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) {
-  for (size_t i=0; i<n; i++) y[i] = 1.0/x[i];
-}
-
-void Xsqrt(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) {
-  for (size_t i=0; i<n; i++) y[i] = std::sqrt(x[i]);
-}
-
-void Xexp(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) {
-  for (size_t i=0; i<n; i++) y[i] = std::exp(x[i]);
-}
-
-void Xsin(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) {
-  for (size_t i=0; i<n; i++) y[i] = std::sin(x[i]);
-}
-
-void Xpow(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) {
-  for (size_t i=0; i<n; i++) y[i] = std::pow(x[i],0.55);
-}
-
-void Xgather(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) {
-#pragma omp simd
-  for (size_t i=0; i<n; i++) y[i] = x[map[i]];
-}
-
-void Xscatter(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) {
-#pragma omp simd
-  for (size_t i=0; i<n; i++) y[map[i]] = x[i];
-}
-
-double timer(void(*f)(size_t, const size_t* __restrict__, const double* __restrict__, double* __restrict__)) {
-  ALIGNAS double x[N], y[N];
-  ALIGNAS size_t map[N];
-  for (size_t i=0; i<N; i++) {x[i] = 1.0; y[i] = 1.0; map[i]=globalmap[i];}
-
-  double used = omp_get_wtime();
-  for (size_t repeat=0; repeat<NREPEAT; repeat++) {
-    f(N, map, x, y);
-    asm volatile("" ::: "memory");  // to stop loop reordering
+void Xsimple(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) 
+{
+  for (size_t i=0; i<n; i++) {
+    y[i] = 2.0*x[i] + 3.0*x[i]*x[i];
   }
-  used = omp_get_wtime() - used;
-  if (y[10] > 1e99) std::cout << y[10] << std::endl; // To ensure loop is not completely optimized away
-  return used/(N*NREPEAT);
 }
 
-std::vector<double> timeromp(void(*f)(size_t n, const size_t* __restrict__,  const double* __restrict__, double* __restrict__)) {
-  std::vector<double> result(MAXTHREAD+1);
+void Xpredicate(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) 
+{
+  for (size_t i=0; i<n; i++) {
+    if (x[i]>0) y[i] = x[i];
+  }
+}
 
-  for (int nthreads=1; nthreads<=MAXTHREAD; nthreads+=THREADSTRIDE) {
-    double used = 0.0;
-    omp_set_num_threads(nthreads);
+void Xrecip(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) 
+{
+  for (size_t i=0; i<n; i++) {
+    y[i] = 1.0/x[i];
+  }
+}
 
+void Xsqrt(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) 
+{
+  for (size_t i=0; i<n; i++) {
+    y[i] = std::sqrt(x[i]);
+  }
+}
+
+void Xexp(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) 
+{
+  for (size_t i=0; i<n; i++) {
+    y[i] = std::exp(x[i]);
+  }
+}
+
+void Xsin(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y)
+{
+  for (size_t i=0; i<n; i++) {
+    y[i] = std::sin(x[i]);
+  }
+}
+
+void Xpow(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) 
+{
+  for (size_t i=0; i<n; i++) {
+    y[i] = std::pow(x[i],0.55);
+  }
+}
+
+void Xgather(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) 
+{
+  #pragma omp simd
+  for (size_t i=0; i<n; i++) {
+    y[i] = x[map[i]];
+  }
+}
+
+void Xscatter(size_t n, const size_t* __restrict__ map, const double* __restrict__ x, double* __restrict__ y) 
+{
+  #pragma omp simd
+  for (size_t i=0; i<n; i++) {
+    y[map[i]] = x[i];
+  }
+}
+
+//double timer(size_t nthread, void(*f)(size_t, const size_t* __restrict__, const double* __restrict__, double* __restrict__)) {
+double timer(size_t nthread, decltype(Xsimple)* f)
+{
+  double used = 0.0;
+  double result = 0;
+
+  if (nthread == 0) {
+
+    ALIGNAS double x[N], y[N];
+    ALIGNAS size_t map[N];
+    for (size_t i=0; i<N; i++) {x[i] = 1.0; y[i] = 1.0; map[i]=globalmap[i];}
+
+    used = omp_get_wtime();
+    for (size_t repeat=0; repeat<NREPEAT; repeat++) {
+      f(N, map, x, y);
+      asm volatile("" ::: "memory");  // to stop loop reordering
+    }
+    used = omp_get_wtime() - used;
+    if (y[10] > 1e99) std::cout << y[10] << std::endl; // To ensure loop is not completely optimized away
+
+  } else {
+
+    omp_set_num_threads(nthread);
 #pragma omp parallel
     {
       int tid = omp_get_thread_num();
@@ -123,11 +155,13 @@ std::vector<double> timeromp(void(*f)(size_t n, const size_t* __restrict__,  con
       }
 #pragma omp barrier
       if (tid == 0) used = omp_get_wtime() - used;
-      
       if (y[10] > 1e99) std::cout << y[10] << std::endl; // To ensure loop is not completely optimized away
     }
-    result[nthreads] = used/(N*NREPEAT);
+
   }
+
+  result = used/(N*NREPEAT);
+  printf("    %10.2e   ", result);
   return result;
 }
 
@@ -160,40 +194,37 @@ int main() {
      {&Xpow,"pow"},
     };
 
-  std::vector<std::pair<double,std::vector<double>>> times;
-  
-  //for (const auto & [kernel,name] : kernels) { // sigh --- Cray c++14 only
-  for (const auto& pair : kernels) {
-    const auto& kernel = pair.first;
-    const auto& name = pair.second;
-
-    if (name == "shortgather" or name == "shortscatter") std::swap(globalmap,shortmap);
-    sleep(1); // to let the processor cool down so turbo mode can kick in
-    double s = timer(kernel);  // single thread
-    auto r = timeromp(kernel); // multiple threads with openmp
-    times.push_back({s,r});
-    if (name == "shortgather" or name == "shortscatter") std::swap(globalmap,shortmap);
-  }
-
   printf("# threads");
-  for (const auto& pair : kernels) {
-    const auto& name = pair.second;
+  for (auto const & pair : kernels) {
+    auto const & name = pair.second;
     printf("%15s  ", name.c_str());
   }
   printf("\n");
   printf("# -------");
-  for (size_t t=1; t<=times.size(); t++) printf("  ---------------");
-  printf("\n");
-
-  printf("%6d    ", 0);
-  for (const auto& pair : times) printf("    %10.2e   ",pair.first);
-  printf("\n");
-    
-  for (size_t t=1; t<=MAXTHREAD; t++) {
-    printf("%6lu    ", t);
-    for (const auto& pair : times) printf("    %10.2e   ",pair.second.at(t));
-    printf("\n");
+  for (int i=0; i<kernels.size(); ++i) {
+    printf("  ---------------");
   }
-  
+  printf("\n");
+  fflush(stdout);
+
+  //for (int nthread=0; nthread<=MAXTHREAD; nthread+=THREADSTRIDE) {
+  for (size_t const nthread : THREAD_COUNTS) {
+    printf("%6zu    ", nthread);
+    for (auto const & pair : kernels) {
+      auto const & kernel = pair.first;
+      auto const & name = pair.second;
+
+      if (name == "shortgather" or name == "shortscatter") std::swap(globalmap,shortmap);
+#ifndef __aarch64__
+      sleep(1); // to let x86 processor cool down so turbo mode can kick in
+#endif
+      timer(nthread, kernel);
+      if (name == "shortgather" or name == "shortscatter") std::swap(globalmap,shortmap);
+    }
+    printf("\n");
+    fflush(stdout);
+  }
+
   return 0;
 }
+
