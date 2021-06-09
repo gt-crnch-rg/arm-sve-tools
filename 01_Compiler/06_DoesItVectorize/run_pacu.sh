@@ -16,4 +16,4 @@ module purge
 module load arm21/21.0
 make arm
 
-python3 makedata.py
+./compare.py 0 out.*
