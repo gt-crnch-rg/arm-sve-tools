@@ -36,7 +36,7 @@ OMPENV = OMP_PLACES=CORES OMP_PROC_BIND=close OMP_NUM_THREADS=48
 #RUNCMD = srun -N 1 -p short -c 48
 
 run:
-	./run_pacu.sh
+	./run_ookami.sh
 
 # GCC 10.2.0 or older
 gcc-old:
