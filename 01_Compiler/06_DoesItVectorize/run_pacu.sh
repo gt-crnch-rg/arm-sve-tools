@@ -16,4 +16,9 @@ module purge
 module load arm21/21.0
 make arm
 
+module purge
+module load A64FX/RHEL/8.1/FJSVstclanga/1.1.0
+make fujitsu
+
+
 ./compare.py 0 out.*
