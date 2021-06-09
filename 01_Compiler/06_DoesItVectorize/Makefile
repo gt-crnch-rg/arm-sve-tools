@@ -66,6 +66,13 @@ cray:
 	CC -O3 -h aggress,flex_mp=tolerant,msgs,negmsgs,vector3,omp test.cc
 	$(OMPENV) $(RUNCMD) ./a.out | tee out.`which CC | sed -e s,/,:,g`
 
+# Fujitsu A64FX compiler
+fujitsu:
+	which FCC
+	FCC --version
+	FCC -Kfast -Kopenmp test.cc
+	$(OMPENV) $(RUNCMD) ./a.out | tee out.`which FCC | sed -e s,/,:,g`
+
 # Intel Skylake
 intel:
 	which icpc
