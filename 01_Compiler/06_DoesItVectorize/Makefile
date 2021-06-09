@@ -74,5 +74,5 @@ intel:
 	$(OMPENV) ./a.out | tee out.`which icpc | sed -e s,/,:,g`
 
 clean:
-	/bin/rm -rf a.out *~
+	/bin/rm -rf a.out *~ out.*
 
