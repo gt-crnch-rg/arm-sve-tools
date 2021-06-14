@@ -80,6 +80,27 @@ run-perf: $(EXE)
 	# r194:  4INST_COMMIT: cycles where four instructions are committed.
 	$(RUN) perf stat -e r11,r23,r24,r184,r191,r192,r193,r194 ./$(EXE)
 
+run-fapp: $(EXE)
+	if [[ "$(CC)" != "fcc" ]] ; then \
+	  echo "The Fujitsu profiler must be used with the Fujitsu compiler." ;\
+	  exit 1 ;\
+	fi
+	which fapp
+	rm -rf profile-fapp
+	i=1 ;\
+	while [[ $$i -le 17 ]] ; do \
+	  fapp -C -d ./profile-fapp/rep$$i -Hevent=pa$$i ./$(EXE) ;\
+          ((i++)) ;\
+	done
+	i=1 ;\
+	while [[ $$i -le 17 ]] ; do \
+	  fapp -A -d ./profile-fapp/rep$$i -Icpupa,nompi -tcsv -o ./profile-fapp/pa$$i.csv ;\
+	  ((i++)) ;\
+	done
+	cp -v  $(dir $CC)/../misc/cpupa/cpu_pa_report.xlsm ./profile-fapp || \
+	  echo "cpu_pa_report.xlsm not found.  Please copy it to ./profile-fapp"
+	echo "Profiling complete!  Copy $(PWD)/profile-fapp to a Windows machine for post-processing with Excel"
+
 $(EXE): $(OBJ)
 	$(call print_hline)
 	$(call print_version)
