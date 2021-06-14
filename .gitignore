@@ -10,3 +10,7 @@ perf.data*
 build/
 *.lst
 *.dis
+
+#Fujitsu profiler files
+EProf*.pri
+pa*.csv
