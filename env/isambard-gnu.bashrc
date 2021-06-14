@@ -19,6 +19,5 @@
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/isambard.bashrc
 
-module load cce-sve/10.0.1
+module load gcc/11.1.0
 module list
-

@@ -17,12 +17,10 @@
 #------------------------------------------------------------------------------------
 
 
-[ -d $HOME/arm-sve-tools ] || cp -a ~ri-jlinford/arm-sve-tools $HOME
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/isambard.bashrc
 
-export ARM_LICENSE_DIR=/lustre/software/aarch64/tools/arm-compiler/licences
+#export ARM_LICENSE_DIR=/lustre/software/aarch64/tools/arm-compiler/licences
 
-module purge
-module use /lustre/software/aarch64/tools/arm-compiler/20.3/modulefiles
-module use /lustre/projects/bristol/modules-a64fx/modulefiles
-module load Generic-SVE/RHEL/8/arm-linux-compiler-20.3/armpl/20.3.0
+module load tools/arm-compiler-a64fx/21.0
+module list
 

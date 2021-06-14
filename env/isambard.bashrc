@@ -17,8 +17,9 @@
 #------------------------------------------------------------------------------------
 
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/isambard.bashrc
+[ -d $HOME/arm-sve-tools ] || cp -a ~ri-jlinford/arm-sve-tools $HOME
 
-module load cce-sve/10.0.1
-module list
+module purge
+module use /lustre/projects/bristol/modules-a64fx/modulefiles
+module use /lustre/software/aarch64/modulefiles
 
