@@ -19,6 +19,7 @@
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/isambard.bashrc
 
-module load cce-sve/10.0.1
+module restore PrgEnv-cray
+module load perftools-base/20.10.0
 module list
 
