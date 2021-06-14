@@ -27,6 +27,11 @@ EXE_SVE    = hacc_$(COMPILER)_sve.exe
 
 EXE = $(EXE_NEON) $(EXE_SVE)
 
+# Runtime parameters
+OMP_ENV = OMP_NUM_THREADS=48 OMP_PROC_BIND=close
+NUMACTL = numactl -C 0-47 -l
+RUN = $(OMP_ENV) $(NUMACTL)
+
 
 .PHONY: all clean run
 
@@ -37,9 +42,9 @@ clean:
 
 run: $(EXE)
 	$(call print_hline)
-	./$(EXE_NEON) $(ITERATIONS)
+	$(RUN) ./$(EXE_NEON) $(ITERATIONS)
 	$(call print_hline)
-	./$(EXE_SVE) $(ITERATIONS)
+	$(RUN) ./$(EXE_SVE) $(ITERATIONS)
 	$(call print_hline)
 
 $(EXE_NEON): $(SRC)
