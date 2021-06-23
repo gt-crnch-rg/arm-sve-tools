@@ -17,7 +17,7 @@
 #------------------------------------------------------------------------------------
 
 
-[ -d $HOME/arm-sve-tools ] || cp -a ~jlinford/arm-sve-tools $HOME
+[ -d $HOME/arm-sve-tools ] || cp -a ~ri-jlinford/arm-sve-tools $HOME
 
 module purge
 module use /lustre/projects/bristol/modules-a64fx/modulefiles
