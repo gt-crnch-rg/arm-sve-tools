@@ -17,8 +17,7 @@
 #------------------------------------------------------------------------------------
 
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/isambard.bashrc
+[ -d $HOME/arm-sve-tools ] || cp -a ~jlinford/arm-sve-tools $HOME
 
-module load fujitsu-compiler/4.3.1
-module list
+module purge
 

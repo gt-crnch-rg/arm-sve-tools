@@ -17,10 +17,9 @@
 #------------------------------------------------------------------------------------
 
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/isambard.bashrc
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/base.bashrc
 
-#export ARM_LICENSE_DIR=/lustre/software/aarch64/tools/arm-compiler/licences
-
-module load tools/arm-compiler-a64fx/21.0
+module restore PrgEnv-cray
+module load perftools-base/20.10.0
 module list
 

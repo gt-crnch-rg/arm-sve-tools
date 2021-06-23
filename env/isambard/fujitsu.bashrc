@@ -17,7 +17,8 @@
 #------------------------------------------------------------------------------------
 
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/isambard.bashrc
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/base.bashrc
 
-module load gcc/11.1.0
+module load fujitsu-compiler/4.3.1
 module list
+

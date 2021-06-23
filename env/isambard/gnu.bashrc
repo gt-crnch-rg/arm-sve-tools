@@ -17,9 +17,7 @@
 #------------------------------------------------------------------------------------
 
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/isambard.bashrc
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/base.bashrc
 
-module restore PrgEnv-cray
-module load perftools-base/20.10.0
+module load gcc/11.1.0
 module list
-

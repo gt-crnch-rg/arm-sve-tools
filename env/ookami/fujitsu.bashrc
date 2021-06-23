@@ -17,9 +17,8 @@
 #------------------------------------------------------------------------------------
 
 
-[ -d $HOME/arm-sve-tools ] || cp -a ~ri-jlinford/arm-sve-tools $HOME
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/.bashrc
 
-module purge
-module use /lustre/projects/bristol/modules-a64fx/modulefiles
-module use /lustre/software/aarch64/modulefiles
+module load fujitsu/compiler/1.0.20
+module list
 
