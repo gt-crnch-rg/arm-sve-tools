@@ -17,7 +17,7 @@
 #------------------------------------------------------------------------------------
 
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/base.bashrc
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/.bashrc
 
 module load fujitsu-compiler/4.3.1
 module list

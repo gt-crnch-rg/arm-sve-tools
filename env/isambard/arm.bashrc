@@ -17,7 +17,7 @@
 #------------------------------------------------------------------------------------
 
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/base.bashrc
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/.bashrc
 
 #export ARM_LICENSE_DIR=/lustre/software/aarch64/tools/arm-compiler/licences
 

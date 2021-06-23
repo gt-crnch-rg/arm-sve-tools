@@ -17,7 +17,7 @@
 #------------------------------------------------------------------------------------
 
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/base.bashrc
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"/.bashrc
 
 module restore PrgEnv-cray
 module load perftools-base/20.10.0
