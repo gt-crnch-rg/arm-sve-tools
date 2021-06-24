@@ -103,9 +103,9 @@ FLAGS_VERSION = --version
 
 CFLAGS_OPT    = -Kfast
 CFLAGS_NOVEC  = -KNOSVE
-CFLAGS_REPORT = 
+CFLAGS_REPORT = -Koptmsg=2
 CFLAGS_OPENMP = -Kopenmp -Nfjomplib
-CFLAGS_NEON   = # Not supported
+CFLAGS_NEON   = -KGENERIC_CPU
 CFLAGS_SVE2   = # Not supported
 
 CXXFLAGS_OPT    = $(CFLAGS_OPT)
@@ -140,8 +140,8 @@ CFLAGS_OPT    = -O3
 CFLAGS_NOVEC  = -hvector0
 CFLAGS_REPORT = -hlist=a
 CFLAGS_OPENMP = -homp
-CFLAGS_NEON   = 
-CFLAGS_SVE2   = 
+CFLAGS_NEON   = # Not supported
+CFLAGS_SVE2   = # Not supported
 
 CXXFLAGS_OPT    = $(CFLAGS_OPT)
 CXXFLAGS_NOVEC  = $(CFLAGS_NOVEC)
