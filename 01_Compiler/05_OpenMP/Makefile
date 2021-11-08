@@ -18,7 +18,7 @@
 
 include ../../config.mk
 
-MATRIX_SIZE = 1024 1024 1024
+MATRIX_SIZE = 512 512 512
 BLOCK_SIZE = 128
 
 SRC = mm_omp.cpp
