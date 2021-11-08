@@ -18,7 +18,7 @@
 
 include ../../config.mk
 
-MATRIX_SIZE = 1024 1024 1024
+MATRIX_SIZE = 512 512 512
 
 SRC = mm_lib.cpp
 
