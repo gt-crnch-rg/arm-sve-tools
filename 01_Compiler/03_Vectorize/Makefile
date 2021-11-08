@@ -19,8 +19,8 @@
 include ../../config.mk
 
 # Input parameters for `make run`
-MATRIX_SIZE = 1024 1024 1024
-BLOCK_SIZE = 1024
+MATRIX_SIZE = 512 512 512
+BLOCK_SIZE = 512
 
 
 SRC = mm_vec.cpp
