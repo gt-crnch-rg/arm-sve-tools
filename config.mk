@@ -199,6 +199,17 @@ LDFLAGS_LIBRARY  = -lcblas -lm
 
 else
 #############################################################################
+# OpenBLAS library flags
+#############################################################################
+ifeq (openblas,$(LIBRARY))
+
+CFLAGS_LIBRARY   = -DUSE_CBLAS -I/usr/include/openblas/
+CXXFLAGS_LIBRARY = -DUSE_CBLAS -I/usr/include/openblas/
+FFLAGS_LIBRARY   = -DUSE_CBLAS -I/usr/include/openblas/
+LDFLAGS_LIBRARY  = -lopenblaso -lm
+
+else
+#############################################################################
 # Arm Performance Library (ArmPL) library flags
 #############################################################################
 ifeq (armpl,$(LIBRARY))
@@ -242,6 +253,7 @@ else
 $(error Invalid parameter: LIBRARY=$(LIBRARY))
 
 #############################################################################
+endif
 endif
 endif
 endif
