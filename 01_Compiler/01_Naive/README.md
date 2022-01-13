@@ -6,7 +6,9 @@ command line options, which represent the three dimensions
 of the matrices $`n`$, $`m`$, and $`l`$.  This then represents the 
 following matrix operation:
 
-<img src="https://latex.codecogs.com/svg.image?\bg_black&space;C_{nl}&space;=&space;A_{nm}&space;\times&space;B_{ml}" title="\bg_black C_{nl} = A_{nm} \times B_{ml}" />
+```math
+C_{nl} = A_{nm} \times B_{ml}
+```
 
 To compile the code, simply type:
 
