@@ -206,7 +206,7 @@ ifeq (openblas,$(LIBRARY))
 CFLAGS_LIBRARY   = -DUSE_CBLAS -I/usr/include/openblas/
 CXXFLAGS_LIBRARY = -DUSE_CBLAS -I/usr/include/openblas/
 FFLAGS_LIBRARY   = -DUSE_CBLAS -I/usr/include/openblas/
-LDFLAGS_LIBRARY  = -lopenblaso -lm
+LDFLAGS_LIBRARY  = -lopenblas -lm
 
 else
 #############################################################################
